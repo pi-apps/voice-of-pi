@@ -1,0 +1,507 @@
+<div section__shop>
+    <div class="text-center d-block container px-0">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/shop-5.jpg" class="w-100" />
+    </div>
+    <div taboola class="pt-3 container">
+    </div>
+    <div class="container">
+        <div class="text-center" loading></div>
+        <div>
+            <div shop-special class="mt-4">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+$("[page-section='shop']").append($("[section__shop]").html());
+cache_images();
+</script>
+
+
+
+<script>
+function get_shoplist_image(index)
+{
+	$("[page-section='shop'] [mypbg]").each(function(d){
+
+		if ($(this).attr("load"))
+		{
+			return;
+		}
+
+		if (index>d)
+		{
+			$(this).attr("load","OK");
+			$(this).css("background-image","url("+$(this).attr("mypbg")+")");
+		}
+
+	});
+}
+
+function get_shop_list() {
+
+    
+    
+    var j = {};
+
+    var url="/api";
+    
+    if (!PV.get_shop_init)
+    {
+        PV.get_shop_init="OK";
+        url="/cache";
+        j.action="shop";
+    }
+    else
+    {
+        j.component = "shop";
+        j.action = "get";
+        j.param = PV.shop_action;  
+        j.category=PV.shop_category;
+    }
+
+    $("[loading]").loading();
+
+    if (location.hostname=="localhost")
+    {
+        CDN="https://cdn.pvfile.com";
+    }
+
+
+    $.post(url,j, function(d) {
+
+        $("[loading]").loading(false);     
+
+        var sproduct = d.sproduct;
+
+        var spstr="";
+
+        for (var i in sproduct) {
+
+            PS_INDEX[sproduct[i].id] = sproduct[i];
+
+            var sp = sproduct[i];
+
+            var img = get_cache_image("/upfile/asset/photo-1.jpg");
+            if (sp.gallery) {
+                var fimg = sp.gallery.split(",")[0];
+                img = CDN+fimg.split(".")[0] + "-thumb." + fimg.split(".")[1];
+            }
+
+            if (sp.gallery.indexOf(".mp4")>0)
+            {
+                img = get_cache_image("/upfile/asset/photo-1.jpg");
+            }
+
+            var epf = "";
+            if (sp.enterprise) {
+                epf = '<span class="px-1 ml-2" style="background:#5892e0;color:#fff;font-size:12px;">企</span>';
+            }
+
+            var qlt = "";
+            if (sp.quality) {
+                qlt = '<span class="px-1 ml-2" style="background:#f4af48;color:#fff;font-size:12px;">闲置</span>';
+            }
+
+            if (!sp.ulike)
+            {
+                sp.ulike=0;
+            }
+
+            var sapp = "";
+            if (sp.app) {
+                sapp = '<span class="px-2 py-1" style="background:#5b99d1;display:inline-block;position:absolute;color:#fff;font-size:12px; opacity:0.85;right:0;top:0;">自主生态</span>';
+                sp.app_uid=sp.uid;
+            }
+            else
+            {
+                sp.app_uid="";
+            }
+
+            
+            
+            var gwidth="width:calc(50% - 15px);";
+            if ($(window).width()>1000)
+            {
+                gwidth="width:calc(25% - 15px);";
+            }
+
+            var spp="";
+            
+            var rmb="";
+
+        if (sp.rmb>0)
+        {
+            rmb='<div class="text-center text-light py-1 mt-1" style="background: linear-gradient(0.25turn, #f4af48, #d42727);font-size:12px;width:100%;position:absolute;bottom:0;left:0; opacity:0.75;">¥'+rmbntd(sp.rmb)+'</div>';
+        }
+
+            spstr += '<div class="d-inline-block cursor-pointer mb-4" style="'+gwidth+'margin-right:15px;"><div style="width:100%;background-size:cover;background:#eee center center no-repeat cover;position:relative;" mypbg="' + img + '" open-product-home="'+sp.id+'" open-product-app="' + sp.app_uid + '">'+sapp+rmb+'</div><div class="d-flex justify-content-between align-items-center"><span class="piprice text-left mt-1 text-pi-1 bold" style="font-size:16px;">' + ntd(sp.price) + '</span><span>' + qlt + epf + '</span></div><div class="text-muted mt-0 text-truncate" style="font-size:12px;">'+sp.ulike+'人看过 • '+sp.nickname+'</div></div>';
+            
+        }
+
+        spstr='<div class="row ml-0 text-left" style="font-size:0;width:calc(100% + 15px); position:relative; ">'+spstr+'</div>'; 
+
+        if (PV.shop_category)
+        {
+            spstr='<div current-shop-category class="mb-3"><span class="btn py-1 px-4 font-4 btn-pi-1 position-relative" style="padding-right: 40px !important; border-radius:0;"><font>'+$("[ps-category-modal] div.btn[value='"+PV.shop_category+"']").text()+'</font><span class="px-2 py-1" style="position: absolute;top:0;right:-1px;background: #c00;height:100%;">X</span></span></div>'+spstr;
+        }
+
+        $("[page-section='shop'] [shop-special]").html(spstr);
+
+
+
+
+
+
+
+        $("[recent-shop] [open-home-product]").each(function(){
+        	$(this).click(function(){
+                if ($(this).attr("open-product-app"))
+                {
+                    window.parent.location.href="https://"+$(this).attr("open-product-app")+".pivoice.app";
+                }
+                else
+                {
+                    open_new_product($(this).attr("open-home-product"));
+                }
+        		
+        	});
+        });
+
+        $("[page-section='shop'] [open-product-home]").each(function(){
+            $(this).click(function(){
+                
+                if ($(this).attr("open-product-app"))
+                {
+                    window.parent.location.href="https://"+$(this).attr("open-product-app")+".pivoice.app";
+                }
+                else
+                {
+                    page_index.push({index:"shop"});  
+
+                  open_new_product($(this).attr("open-product-home"));
+                }
+                
+            });
+        });
+
+        var wid=$(window).width();
+
+        $("[current-shop-category]").click(function(){
+        	$(this).hide();
+        	PV.shop_category="";
+        	get_shop_list();
+        });
+
+        
+        
+
+        $("[page-section='shop'] [mypbg]").each(function(d){
+            $(this).css("height",$(this).width()+"px");
+            if (d<10)
+            {
+                $(this).css("background-image","url("+$(this).attr("mypbg")+")");
+            }
+        });
+
+		$("[page-section='shop']").scroll(function(){
+            clearTimeout(PV.shop_scroll_timer);
+            var $t=$(this);
+            PV.shop_scroll_timer=setTimeout(function(){
+                //console.log("message");
+                if ($t.scrollTop()>400)
+                {
+                    var index=(parseInt($t.scrollTop()/400)+1)*10;
+                    //console.log(index);
+                    get_shoplist_image(index);
+                }
+            },200);
+            
+        });
+
+        if (!PV.shopp_opened)
+        {
+            setInterval(function(){
+                if ($("[page-section='shop']").css("display")=="block")
+                {
+                    $("[page-section='shop'] [mypbg]").each(function(d){
+                        $(this).css("height",$(this).width()+"px");
+                    });
+                }
+            },500);
+            PV.shopp_opened=true;
+        }
+
+    });
+}
+
+
+$("[shop-header] [ps-action]").each(function() {
+    $(this).click(function() {
+        PV.shop_action = $(this).attr("ps-action");
+        $("[shop-header] [ps-action]").addClass("btn-outline-light").removeClass("btn-pi-1");
+        $(this).addClass("btn-pi-1").removeClass("btn-outline-light");
+        get_shop_list();
+    });
+});
+
+$("[shop-header] [ps-action-1]").each(function() {
+    $(this).click(function() {
+        toast("即将开放!");
+    });
+});
+
+
+
+
+get_shop_list();
+</script>
+<div class="modal fade" ps-category-modal>
+    <div class="modal-dialog max-width-600">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h5 class="modal-title" L="141">商品分类</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+
+                <div result>
+                    
+                    <div class="p-3 mb-3 btn btn-light w-100"  style="background: #fff;font-size:16px;" value="1">
+                        女装 / 内衣 / 奢品
+                    </div>
+                    
+                    <div class="p-3 mb-3 btn btn-light w-100"  style="background: #fff;font-size:16px;" value="2">
+                        女鞋 / 男鞋 / 箱包
+                    </div>
+                    
+                    <div class="p-3 mb-3 btn btn-light w-100"  style="background: #fff;font-size:16px;" value="3">
+                        美妆 / 饰品 / 洗护
+                    </div>
+                    
+                    <div class="p-3 mb-3 btn btn-light w-100"  style="background: #fff;font-size:16px;" value="4">
+                        男装 / 运动 / 百货
+                    </div>
+                    
+                    <div class="p-3 mb-3 btn btn-light w-100"  style="background: #fff;font-size:16px;" value="5">
+                        手机 / 数码 / 手表
+                    </div>
+                    
+                    <div class="p-3 mb-3 btn btn-light w-100"  style="background: #fff;font-size:16px;" value="6">
+                        家装 / 电器 / 车品
+                    </div>
+                    
+                    <div class="p-3 mb-3 btn btn-light w-100"  style="background: #fff;font-size:16px;" value="7">
+                        食品 / 生鲜 / 饮料
+                    </div>
+                    
+                    <div class="p-3 mb-3 btn btn-light w-100"  style="background: #fff;font-size:16px;" value="8">
+                        医药 / 保健 / 母婴
+                    </div>
+                    
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+	
+	$("[ps-category-1]").each(function(){
+        $(this).click(function(){
+            toast("即将开放!");
+            return;
+            PV.ps_category=$(this).attr("ps-category");
+            $("[ps-category-modal]").modal("show");
+        });
+    });
+
+    $("[ps-category-modal] div.btn").each(function(d){
+        $(this).click(function(){
+            if (PV.ps_category=="create")
+            {
+                $("[modal-creator] [pcategory]").text($(this).text());
+                $("[modal-creator] [pcategory]").attr("value",$(this).attr("value"));
+            }
+
+            if (PV.ps_category=="update")
+            {
+                $("[modal-product-update] [pcategory]").text($(this).text());
+                $("[modal-product-update] [pcategory]").attr("value",$(this).attr("value"));
+            }
+
+            if (PV.ps_category=="shop")
+            {
+                PV.shop_category=$(this).attr("value");
+                get_shop_list();
+                $("[shop-banner]").hide();
+            }
+            $("[ps-category-modal]").modal("hide");
+        });
+    });
+
+</script>
+<div class="modal fade" modal-mylove>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100;">
+                <h5 class="modal-title text-uppercase" title>我的收藏</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                 <div loading></div>
+                 <div result class="text-muted">
+                     
+                 </div>                 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+
+PV.mylove_page=1;
+
+function get_mylove_data(index)
+{
+    if (index)
+    {
+        PV.mylove_page++;
+    }
+    else
+    {
+        PV.mylove_page=1;
+    }
+
+    var count=PV.mylove_list.length;
+
+    var cc=(PV.mylove_page-1)*10;
+
+    if (cc+10<count)
+    {
+        count=cc+10;
+    }
+
+    var datastr="";
+
+
+    for (var i=cc;i<count;i++)
+    {
+        if (!PV.mylove_list[i])
+        {
+            continue;
+        }
+
+        var gallery=PV.mylove_list[i].gallery.split(",")[0];
+
+        gallery=gallery.split(".")[0]+"-thumb."+gallery.split(".")[1];
+
+        datastr+='<div class="p-2 py-3 d-flex cursor-pointer w-100 align-items-start" open-mylove="'+PV.mylove_list[i].id+'">';
+            datastr+='<div style="height:100px;width:100px;background: url('+CDN+gallery+') no-repeat center center; background-size: cover;display:inline-block;"></div>';
+            datastr+='<div class="pl-3 position-relative" style="width:calc(100% - 100px);height:100%;">';
+                datastr+='<div style="text-align:left;">';
+                    datastr+='<span class="font-4" style="font-weight:500;">';
+                        datastr+=''+PV.mylove_list[i].title+'</span>';
+                datastr+='</div>';
+                datastr+='<div style="text-align:left;">';
+                    datastr+='<span class="font-4 piprice mt-2 text-pi-1"  style="font-weight:500;">';
+                        datastr+=''+PV.mylove_list[i].price+'</span>';                
+                datastr+='</div>';
+            datastr+='</div>';
+        datastr+='</div>';
+    }
+
+    if (index)
+    {
+        $("[modal-mylove] [result]").append(datastr);
+    }
+    else
+    {
+        $("[modal-mylove] [result]").html(datastr);
+    }
+
+
+    $("[open-mylove]").each(function(){
+        if ($(this).attr("load"))
+        {
+            return;
+        }
+        $(this).attr("load","YES");
+        $(this).click(function(event) {
+            open_new_product($(this).attr("open-mylove"));
+        });
+    });
+
+}
+
+
+
+
+PV.mylove_selector=$("[modal-mylove]").get(0);
+
+$("[modal-mylove]").scroll(function(event) {
+    if ((PV.mylove_selector.clientHeight + PV.mylove_selector.scrollTop) >= PV.mylove_selector.scrollHeight - 200) {
+        if (PV.mylove_scroll)
+        {
+            return;
+        }
+
+        PV.mylove_scroll=true;
+
+        $("[modal-mylove] [loading]").loading();
+        setTimeout(function(){
+            get_mylove_data(1);
+            $("[modal-mylove] [loading]").loading(false);
+        },300);
+
+        setTimeout(() => {
+            PV.mylove_scroll=false;
+        }, 1000);
+    }
+});
+
+function add_to_love(id)
+{
+    $("[modal-mylove]").modal('show');
+    
+    var json = {};
+    json.component="shop";
+    json.action="love";
+    
+    json.user_name = PV.AUTH.user.username;
+    json.token=PV.AUTH.accessToken;
+    json.user_id=PV.AUTH.user.uid;
+
+    if (id)
+    {
+        json.product_id=id;
+    }
+
+    $("[modal-mylove] [loading]").loading();
+    api(json,function(d){
+        $("[modal-mylove] [loading]").loading(false);
+        if (d)
+        {
+            PV.mylove_list=d.list||[];
+            get_mylove_data(0);
+        }
+    });
+}
+
+$("[mylove-1]").each(function(){
+    $(this).click(function(){
+        toast("即将开放!");
+        //add_to_love($(this).attr("mylove"));
+    });
+});
+</script>

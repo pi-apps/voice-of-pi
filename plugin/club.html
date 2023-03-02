@@ -1,0 +1,1099 @@
+<div style="height:0.1px; overflow: hidden;position: fixed;top:-12000px;">
+    <input type="file" multiple="multiple" accept=".jpeg,.png,.jpg" club-upload-inputer style="opacity: 0;" />
+</div>
+<div club-data-section>
+    <div class="text-center d-block container px-0 position-relative">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/club-5.jpg" class="w-100" />
+    </div>
+    <div class="container py-3">
+        <div>
+            <div class="d-flex align-items-center">
+                <input type="text" class="form-control" placeholder="搜索俱乐部" club-saerch style="display: inline-block;width:calc(100% - 210px);" />
+                <span class="btn btn-pi ml-3" style="font-size:11px;width:90px;" club-location>定位查找</span>
+                <span class="btn btn-pi-1 ml-3" style="font-size:11px;width:90px;" add-club>添加俱乐部</span>
+            </div>
+        </div>
+        <div taboola class="mt-2"></div>
+        <div pv-selector>
+            <div category>
+                <div>热门排行</div>
+                <div>最新加入</div>
+            </div>
+            <div result>
+                <div>
+                </div>
+                <div>
+                </div>
+            </div>
+        </div>
+        <div result-1></div>
+        <div loading></div>
+    </div>
+</div>
+<div class="modal fade" modal-club-create>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100;">
+                <h5 class="modal-title text-uppercase" title>添加俱乐部</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" club-name placeholder="俱乐部名称" />
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <select class="form-control" club-province>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select class="form-control" club-city>
+                        </select>
+                    </div>
+                </div>
+                <textarea class="form-control mt-2" club-address placeholder="俱乐部地址" style="height: 60px; resize: none;"></textarea>
+                <input type="text" class="form-control mt-2" club-phone placeholder="俱乐部电话" />
+                <textarea class="form-control mt-2" club-intro placeholder="俱乐部介绍" style="height: 60px; resize: none;"></textarea>
+                <div class="btn btn-pi-1 mb-0 py-3 text-center mt-2 cursor-pointer w-100" club-photo>
+                    <div class="cms-font-4">上传俱乐部图片</div>
+                    <div class="mt-2" style="color:#eee;">
+                        <font>格式</font>: jpg / png
+                    </div>
+                    <div style="color:#eee;">大小: 小于10M </div>
+                </div>
+                <div>
+                    <div loading></div>
+                    <div gallery></div>
+                </div>
+                <div class="mt-3 text-center"><a class="mr-0 py-3 px-5 cms-font-5 text-light btn btn-pi submit w-100" submit>提交</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" modal-club-edit>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100;">
+                <h5 class="modal-title text-uppercase" title>修改俱乐部</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div club-name class="font-3-bold"></div>
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <select class="form-control" club-province-edit>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select class="form-control" club-city-edit>
+                        </select>
+                    </div>
+                </div>
+                <textarea class="form-control mt-2" club-address placeholder="俱乐部地址" style="height: 60px; resize: none;"></textarea>
+                <input type="text" class="form-control mt-2" club-phone placeholder="俱乐部电话" />
+                <textarea class="form-control mt-2" club-intro placeholder="俱乐部介绍" style="height: 60px; resize: none;"></textarea>
+                <div class="btn btn-pi-1 mb-0 py-3 text-center mt-2 cursor-pointer w-100" club-photo>
+                    <div class="cms-font-4">上传俱乐部图片</div>
+                    <div class="mt-2" style="color:#eee;">
+                        <font>格式</font>: jpg / png
+                    </div>
+                    <div style="color:#eee;">大小: 小于10M </div>
+                </div>
+                <div>
+                    <div loading></div>
+                    <div gallery></div>
+                </div>
+                <div class="mt-3 text-center"><a class="mr-0 py-3 px-5 cms-font-5 text-light btn btn-pi-1 submit w-100" submit>修改</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("[modal-club-create] [club-photo]").click(function(){
+        upload_index="club";
+        $("[skin-input]").trigger('click');
+    });
+
+    $("[modal-club-edit] [club-photo]").click(function(){
+        upload_index="club-edit";
+        $("[skin-input]").trigger('click');
+    });
+
+
+
+    $("[modal-club-create] [submit]").click(function(){
+        var json = {};
+    
+        json.component = "club";
+        json.action = "apply";
+
+        if (!$("[modal-club-create] [club-name]").val())
+        {
+            toast("请填写俱乐部名称!");
+            return;
+        }
+
+
+        if (!$("[modal-club-create] [club-address]").val())
+        {
+            toast("请填写俱乐地址!");
+            return;
+        }
+
+        if (!$("[modal-club-create] [club-phone]").val())
+        {
+            toast("请填写俱乐部电话!");
+            return;
+        }
+        
+        json.info=JSON.stringify({
+            name:$("[modal-club-create] [club-name]").val(),
+            province:$("[modal-club-create] [club-province]").val(),
+            city:$("[modal-club-create] [club-city]").val(),
+            address:$("[modal-club-create] [club-address]").val(),
+            phone:$("[modal-club-create] [club-phone]").val(),
+            intro:$("[modal-club-create] [club-intro]").val(),
+            photo:PV.club_photo,
+        });
+
+        json.user_name = PV.AUTH.user.username;
+        json.token = PV.AUTH.accessToken;
+        json.user_id = PV.AUTH.user.uid;
+
+        api(json, function(d) {
+            if (!d.status)
+            {
+                alert(d.message);
+                return;
+            }
+
+            alert("操作成功!",function(){
+                $("[modal-club-create]").modal("hide");
+            });
+            $("[modal-club-create] [gallery]").html("");
+            $("[modal-club-create] textarea,[modal-club-create] input").val("");
+            PV.club_photo="";
+        });
+    });
+
+
+    
+</script>
+<div class="modal fade" modal-club-view>
+    <div class="modal-dialog" style="margin:auto; max-width: 800px;">
+        <div class="modal-content" style="border-radius: 0; border:none;">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100; border-bottom: none;">
+                <h5 class="modal-title" title></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0" style="padding-bottom: 80px;">
+                <div class="py-2 d-flex justify-content-betwen w-100 cursor-pointer align-items-center">
+                    <div photo style="height: 85px; width: 85px; background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7) center center / cover no-repeat; display: inline-block;"></div>
+                    <div class="pl-3 position-relative" style="width:calc(100% - 85px);height:85px;">
+                        <div class=" " style="width:100%;"><span class="text-muted" idname></span>
+                            <div class="text-muted d-flex align-items-center mt-1" location></div>
+                            <div class="text-muted mt-1"><span class="ml-0">投票:<span class="ml-1" vote-count>0</span><span class="text-primary ml-3" vote>投TA一票</span></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div intro class="mt-2 text-muted "></div>
+                <div class="text-muted mt-2">
+                    <div class="mt-2">人数:<span class="ml-1"><span ccount></span>人</span><span class="text-primary ml-3" user-list>成员列表</span></div>
+                    <div class="mt-2">地址: <span address>**********</span> </div>
+                    <div class="mt-2">电话: <span phone>******</span> </div>
+                    <div class="mt-2" club-show>(加入俱乐部可显示所有信息)</div>
+                    <div loading></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-6 pr-2">
+                        <span class="w-100 btn btn-pi py-2" join-club>我要加入</span>
+                    </div>
+                    <div class="col-6 pl-2">
+                        <span class="w-100 btn btn-pi-1 py-2" club-chat>进入讨论</span>
+                    </div>
+                </div>
+                <div class="mt-3" style="height:0.5px;width:100%;background: #eee;opacity: 0.5;"></div>
+                <div taboola class="mt-2"></div>
+                <div class="row mt-3" club-edit-section style="display: none;">
+                    <div class="col-6 pr-2">
+                        <span class="w-100 btn btn-primary py-2" add-club-album>添加相册</span>
+                    </div>
+                    <div class="col-6 pl-2">
+                        <span class="w-100 btn btn-success py-2" club-edit>资料修改</span>
+                    </div>
+                </div>
+                <!-- <div style="display:none;" add-club-album>
+                    <div style="border:1px solid #ccc; font-size:13px;border-radius: 3px; margin-top:15px; display: flex; justify-content:center;width:100px;height:100px; text-align: center; color:#ccc; align-items:center;">添加相册</div>
+                </div> -->
+                <div club-album-list class="mt-3"></div>
+                <div album-loading></div>
+                <div album-result class="mt-3 px-3">
+                </div>
+                <!-- <div album-no>
+                    <div class="alert alert-secondary w-100 text-center">暂无相册!</div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" modal-club-user>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100;">
+                <h5 class="modal-title text-uppercase" title>俱乐部成员(<span ccount></span>)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-left">
+                <div loading></div>
+                <div class="alert alert-info text-center">创始人:<span class="ml-1" idname></span></div>
+                <div user-result>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" modal-club-location>
+    <div class="modal-dialog" style="margin:auto; max-width: 800px;">
+        <div class="modal-content" style="border-radius: 0; border:none;">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100; border-bottom: none;">
+                <h5 class="modal-title" title>定位查找</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                <div presult></div>
+                <div class="mt-3" style="height:0.5px;width:100%;background: #eee;opacity: 0.5;"></div>
+                <div class="font-3-bold mt-3 pb-2">市区</div>
+                <div cresult>
+                </div>
+                <div class="mt-3" style="height:0.5px;width:100%;background: #eee;opacity: 0.5;"></div>
+                <div class="text-center" style="     width: 100%;     bottom: 60px;     left: 0;     background: #fff;     padding-top: 10px;     padding-bottom: 10px !important;">
+                    <hr class="d-none d-md-block"><span class="btn btn-pi font-3 py-3 w-100" search style="max-width: 500px">查找该地区俱乐部</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$("[modal-club-location] [search]").click(function() {
+    PV.club_location_province = $("[modal-club-location] [presult] .btn-pi").attr("value");
+    PV.club_location_city = $("[modal-club-location] [cresult] .btn-pi").attr("value");
+    $("[modal-club-location]").modal("hide");
+    get_club_data(0);
+});
+
+function club_location_selector() {
+    var str = "";
+    var pindex = 0;
+    var p_club = {};
+    var c_club = {};
+
+    for (var i in PV.club_index) {
+        p_club[PV.club_index[i].province] = p_club[PV.club_index[i].province] || 0;
+        p_club[PV.club_index[i].province]++;
+        c_club[PV.club_index[i].province + "-" + PV.club_index[i].city] = c_club[PV.club_index[i].province + "-" + PV.club_index[i].city] || 0;
+        c_club[PV.club_index[i].province + "-" + PV.club_index[i].city]++;
+    }
+
+    for (var i in province) {
+        var pcount = 0;
+
+        if (p_club[province[i]]) {
+            pcount = p_club[province[i]];
+        }
+
+        var bs = "btn-outline-secondary";
+        if (pindex == 0) {
+            bs = "btn-pi";
+        }
+        pindex++;
+        str += '<span class="btn ' + bs + ' mr-3 mb-2 py-1 px-2" p-index="' + i + '" value="' + province[i] + '">' + province[i] + ' (' + pcount + ')</span>';
+    }
+
+    $("[modal-club-location] [presult]").html(str);
+
+
+    $("[modal-club-location] [presult] [p-index]").each(function() {
+        $(this).click(function() {
+            var str = "";
+            var ccount = 0;
+            var ct = city[$(this).attr("p-index")];
+
+            var pc = p_club[$(this).attr("value")];
+
+            if (!pc) {
+                pc = 0;
+            }
+
+            str += '<span class="btn btn-pi mr-3 mb-2 py-1 px-2" value="">全部' + ' (' + pc + ')</span>';
+
+            for (var i in ct) {
+                var bs = "btn-outline-secondary";
+
+                ccount = 0;
+
+                if (c_club[$(this).attr("value") + "-" + ct[i]]) {
+                    ccount = c_club[$(this).attr("value") + "-" + ct[i]];
+                }
+
+                str += '<span class="btn ' + bs + ' mr-3 mb-2 py-1 px-2" value="' + ct[i] + '">' + ct[i] + ' (' + ccount + ')</span>';
+            }
+
+            $("[modal-club-location] [cresult]").html(str);
+
+            $("[modal-club-location] [cresult] span").each(function() {
+                $(this).click(function() {
+                    $("[modal-club-location] [cresult] span").removeClass("btn-pi").addClass('btn-outline-secondary');
+                    $(this).addClass('btn-pi').removeClass("btn-outline-secondary");
+                });
+            });
+
+            $("[modal-club-location] [presult] span").removeClass("btn-pi").addClass('btn-outline-secondary');
+            $(this).addClass('btn-pi').removeClass("btn-outline-secondary");
+        });
+    });
+
+
+    $("[modal-club-location] [presult] [p-index]:eq(0)").trigger('click');
+}
+</script>
+<script>
+function club_address_auto() {
+    $("[modal-club-create] [club-address]").val($("[club-province]").val() + "" + $("[club-city]").val());
+}
+
+for (var i in province) {
+    $("[club-province]").append('<option value="' + province[i] + '" index="' + i + '">' + province[i] + '</option>');
+}
+
+for (var i in city[0]) {
+    $("[club-city]").append('<option value="' + city[0][i] + '" index="' + i + '">' + city[0][i] + '</option>');
+}
+
+club_address_auto();
+
+$("[club-province]").change(function() {
+    $("[club-city]").html("");
+    var index = $(this).find("option:checked").attr("index");
+    for (var i in city[index]) {
+        $("[club-city]").append('<option value="' + city[index][i] + '" index="' + i + '">' + city[index][i] + '</option>');
+    }
+    club_address_auto();
+});
+
+$("[club-city]").change(club_address_auto);
+
+$("[page-section='club']").append($("[club-data-section]").html());
+
+
+
+$("[page-section='club'] [club-saerch]").keyup(function(e) {
+    PV.club_search = $(this).val().split(" ")[0];
+    get_club_data(0);
+});
+
+$("[page-section='club'] [club-location]").click(function(e) {
+    club_location_selector();
+    $("[modal-club-location]").modal("show");
+});
+
+/*
+$("[page-section='club'] [club-submit]").click(function(){
+  
+    get_club_data(0);
+});*/
+
+cache_images();
+pv_selector();
+
+$("[page-section='club'] [pv-selector] [category] div").each(function(d) {
+    $(this).click(function() {
+        PV.club_sort = d;
+        get_club_data(0);
+    });
+});
+
+var json = {};
+json.action = "club";
+PV.club_index = {};
+$("[page-section='club'] [loading]").loading();
+$.post("/cache", json, function(d) {
+    PV.club_data = d;
+    for (var i in d) {
+        PV.club_index[d[i].id] = d[i];
+    }
+    $("[page-section='club'] [loading]").loading(false);
+    get_club_data(0);
+});
+
+
+
+
+$("[add-club]").click(function() {
+    $("[modal-club-create]").modal("show");
+});
+
+$("[modal-club-view] [club-chat]").click(function() {
+    open_chatroom("俱乐部-" + PV.club_index[PV.current_club].club_name);
+});
+
+$("[modal-club-view] [user-list]").click(function() {
+    var club = PV.club_index[PV.current_club];
+    $("[modal-club-user] [idname]").text("(ID:" + club.uid + ")" + club.nickname);
+    $("[modal-club-user] [ccount]").text(club.ccount);
+    $("[modal-club-user]").modal('show');
+
+    var json = {};
+    json.component = "club";
+    json.action = "user";
+    json.id = PV.current_club;
+
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+
+    $.post("/api", json, function(d) {
+        var str = "";
+        for (var i in d.data) {
+            var dt = d.data[i];
+            str += '<div class="alert alert-secondary text-left">';
+
+            str += '(ID:' + dt.uid + ')' + dt.nickname;
+
+
+            if (PV.club_index[PV.current_club].uid == your_info.id) {
+                if (dt.status) {
+                    str += "<span class='badge badge-success ml-2'>已加入</span>"
+                }
+
+                str += '<div class="mt-2">';
+                if (!dt.status) {
+                    str += '<span class="btn btn-pi-1 mr-3" agree="' + dt.uid + '">同意</span>';
+                }
+                str += '<span class="btn btn-danger" delete="' + dt.uid + '">移除</span>';
+                str += '</div>';
+            }
+
+
+            str += '</div>';
+        }
+
+        $("[modal-club-user] [user-result]").html(str);
+
+        $("[modal-club-user] [user-result] [agree]").each(function() {
+            $(this).click(function() {
+                var json = {};
+                json.component = "club";
+                json.action = "agree";
+                json.id = PV.current_club;
+                json.uid = $(this).attr("agree");
+
+                json.user_name = PV.AUTH.user.username;
+                json.token = PV.AUTH.accessToken;
+                json.user_id = PV.AUTH.user.uid;
+
+                $.post("/api", json, function(d) {
+                    alert("操作成功!", function() {
+                        $("[modal-club-view] [user-list]").trigger("click");
+                    });
+                });
+            });
+        });
+
+        $("[modal-club-user] [user-result] [delete]").each(function() {
+            $(this).click(function() {
+                var json = {};
+                json.component = "club";
+                json.action = "delete";
+                json.id = PV.current_club;
+                json.uid = $(this).attr("delete");
+
+                json.user_name = PV.AUTH.user.username;
+                json.token = PV.AUTH.accessToken;
+                json.user_id = PV.AUTH.user.uid;
+
+                $.post("/api", json, function(d) {
+                    alert("操作成功!", function() {
+                        $("[modal-club-view] [user-list]").trigger("click");
+                    });
+                });
+            });
+        });
+
+    });
+
+
+});
+
+
+$("[modal-club-view] [join-club]").click(function() {
+
+    if (PV.club_index[PV.current_club].uid == your_info.id) {
+        alert("您是该俱乐部部长, 无须提交加入!");
+        return;
+    }
+
+    var json = {};
+    json.component = "club";
+    json.action = "join";
+    json.id = PV.current_club;
+
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+
+    $.post("/api", json, function(d) {
+        toast("您已提交申请, 等待俱乐部部长审核!");
+    });
+});
+
+$("[modal-club-view] [vote]").click(function() {
+    confirm("是否确认投[" + PV.club_index[PV.current_club].club_name + "]一票?", function() {
+        var json = {};
+        json.component = "club";
+        json.action = "vote";
+        json.id = PV.current_club;
+
+        json.user_name = PV.AUTH.user.username;
+        json.token = PV.AUTH.accessToken;
+        json.user_id = PV.AUTH.user.uid;
+
+        $.post("/api", json, function(d) {
+
+            if (!d.status) {
+                alert(d.message);
+                return;
+            }
+
+            alert("操作成功!");
+
+        });
+
+    });
+});
+
+
+PV.club_page = 1;
+PV.club_sort = 0;
+
+function get_club_data(index) {
+    if (index) {
+        PV.club_page++;
+    } else {
+        PV.club_page = 1;
+    }
+
+    var datastr = "";
+
+    var club = [].concat(PV.club_data);
+
+    if (PV.club_search) {
+        var temp = [];
+
+        for (var i in club) {
+            if (club[i].club_name.indexOf(PV.club_search) > -1) {
+                temp.push(club[i]);
+            }
+        }
+
+        club = [].concat(temp);
+    }
+
+    if (PV.club_location_province) {
+        var temp = [];
+
+        if (PV.club_location_city) {
+            for (var i in club) {
+                if (club[i].province == PV.club_location_province && club[i].city == PV.club_location_city) {
+                    temp.push(club[i]);
+                }
+            }
+
+            datastr += '<div class="mt-2 text-muted">查找: ' + PV.club_location_province + " - " + PV.club_location_city + '</div>';
+        } else {
+            for (var i in club) {
+                if (club[i].province == PV.club_location_province) {
+                    temp.push(club[i]);
+                }
+            }
+
+            datastr += '<div class="mt-2 text-muted">查找: ' + PV.club_location_province + '</div>';
+        }
+
+        PV.club_location_city = "";
+        PV.club_location_province = "";
+
+        club = [].concat(temp);
+    }
+
+    if (PV.club_sort) {
+
+        club.sort(function(v1, v2) {
+            if (v1.id > v2.id) {
+                return -1;
+            } else if (v1.id < v2.id) {
+                return 1;
+            } else {
+                return 0;
+            }
+        })
+    } else {
+
+        club.sort(function(v1, v2) {
+
+            if (v1.ulike > v2.ulike) {
+                return -1;
+            } else if (v1.ulike < v2.ulike) {
+                return 1;
+            } else {
+                return 0;
+            }
+        })
+    }
+
+    var count = club.length;
+
+    var cc = (PV.club_page - 1) * 10;
+
+    if (cc + 10 < count) {
+        count = cc + 10;
+    }
+
+
+
+
+    for (var i = cc; i < count; i++) {
+        if (!club[i]) {
+            continue;
+        }
+
+
+        datastr += '<div class="mt-2">';
+        datastr += '<div class="py-2 d-flex justify-content-betwen w-100 cursor-pointer align-items-start" open-club="' + club[i].id + '">';
+        datastr += '<div style="height: 100px; width: 100px; background: url(' + THB(club[i].photo) + ') center center / cover no-repeat; display: inline-block;"></div>';
+        datastr += '<div class="pl-3 position-relative  text-truncate" style="width:calc(100% - 100px);height:100px;">';
+        datastr += '<div class=" " style="width:100%;"><span class="font-3 text-truncate" style="font-weight:500;">' + club[i].club_name + '</span>';
+        datastr += '<div class="text-muted d-flex align-items-center mt-2">' + club[i].info + '</div>';
+        datastr += '</div>';
+        datastr += '<div class="text-muted  mt-2 font-5 d-flex w-100 align-items-center justify-content-start" style="position:absolute;bottom:0;left:15px;">';
+        datastr += '<div><span>人数:<span class="ml-1">' + (club[i].ccount + 1) + '</span></span><span class="ml-4">投票:<span class="ml-1">' + club[i].ulike + '</span></span></div>';
+        datastr += '</div>';
+        datastr += '</div>';
+        datastr += '</div>';
+        datastr += '</div>';
+
+    }
+
+    if (index) {
+        $("[page-section='club'] [result-1]").append(datastr);
+    } else {
+        $("[page-section='club'] [result-1]").html(datastr);
+    }
+
+
+    $("[page-section='club'] [open-club]").each(function() {
+        if ($(this).attr("load")) {
+            return;
+        }
+        $(this).attr("load", "YES");
+        $(this).click(function(e) {
+            PV.current_club = $(this).attr("open-club");
+            get_club_info();
+        });
+    });
+
+}
+
+
+$("[modal-club-view] [add-club-album]").click(function() {
+    $("[club-upload-inputer]").trigger('click');
+});
+
+
+
+
+
+$("[modal-club-edit] [club-province-edit]").change(function() {
+    $("[modal-club-edit] [club-city]").html("");
+    var index = $(this).find("option:checked").attr("index");
+    for (var i in city[index]) {
+        $("[modal-club-edit] [club-city-edit]").append('<option value="' + city[index][i] + '" index="' + i + '">' + city[index][i] + '</option>');
+    }
+    club_address_auto_edit();
+});
+
+$("[modal-club-edit] [club-city-edit]").change(function() {
+    club_address_auto_edit();
+});
+
+function club_address_auto_edit() {
+    $("[modal-club-edit] [club-address]").val($("[club-province-edit]").val() + "" + $("[club-city-edit]").val());
+}
+
+
+$("[modal-club-view] [club-edit]").click(function() {
+    var club = PV.club_index[PV.current_club];
+    $("[modal-club-edit] [club-name]").text(club.club_name);
+    $("[modal-club-edit] [club-address]").val(club.address);
+    $("[modal-club-edit] [club-phone]").val(club.phone);
+    $("[modal-club-edit] [club-intro]").val(club.info);
+
+    for (var i in province) {
+        $("[modal-club-edit] [club-province-edit]").append('<option value="' + province[i] + '" index="' + i + '">' + province[i] + '</option>');
+    }
+
+    var province_index = $("[modal-club-edit] [club-province-edit] option[value='" + club.province + "']").attr("index");
+    $("[modal-club-edit] [club-province-edit]").get(0).selectedIndex = province_index;
+
+    for (var i in city[province_index]) {
+        $("[modal-club-edit] [club-city-edit]").append('<option value="' + city[province_index][i] + '" index="' + i + '">' + city[province_index][i] + '</option>');
+    }
+
+    var city_index = $("[modal-club-edit] [club-city-edit] option[value='" + club.city + "']").attr("index");
+    $("[modal-club-edit] [club-city-edit]").get(0).selectedIndex = city_index;
+
+    if (club.photo) {
+        if (club.photo.indexOf(".") > 0) {
+            PV.club_photo = club.photo;
+            $("[modal-club-edit] [gallery]").html("<img src='" + CDN + club.photo + "' style='width:50%;max-height:200px;margin-top:10px;' />");
+        }
+    }
+
+
+    $("[modal-club-edit]").modal("show");
+});
+
+
+$("[modal-club-edit] [submit]").click(function() {
+
+    var json = {};
+
+    json.component = "club";
+    json.action = "edit";
+
+    if (!$("[modal-club-edit] [club-intro]").val()) {
+        toast("请填写俱乐部介绍!");
+        return;
+    }
+
+    json.province = $("[modal-club-edit] [club-province-edit]").val();
+    json.city = $("[modal-club-edit] [club-city-edit]").val();
+    json.address = $("[modal-club-edit] [club-address]").val();
+    json.phone = $("[modal-club-edit] [club-phone]").val();
+    json.intro = $("[modal-club-edit] [club-intro]").val();
+    json.photo = PV.club_photo;
+
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+
+    api(json, function(d) {
+
+        alert("操作成功!", "");
+
+    });
+
+});
+
+function get_club_gallery() {
+    var json = {};
+    json.component = "club";
+    json.action = "get-gallery";
+    json.id = PV.current_club;
+
+    $("[modal-club-view] [album-loading]").loading();
+
+    $.post("/api", json, function(d) {
+
+        $("[modal-club-view] [album-loading]").loading(false);
+
+        var str = '<div class="row" album-result>';
+        d = d.gallery;
+        for (var i in d) {
+            var del = "";
+            if (PV.club_index[PV.current_club].uid == your_info.id) {
+                del = '<span class="badge badge-danger p-2" delete-gallery="' + d[i].id + '" style="position:absolute;right:0;top:0;">X</span>';
+            }
+            str += '<div class="col-4 position-relative mb-3">' + del + '<div album gallery="' + d[i].gallery + '" style="background-image:url(' + THB(d[i].gallery) + ');background-size:cover;width:100%;"></div></div>';
+        }
+
+        str += "</div>"
+
+        $("[modal-club-view] [club-album-list]").html(str);
+
+        $("[modal-club-view] [album-result] [album]").css("height", $("[modal-club-view] [album-result] [album]:eq(0)").width() + "px");
+
+        $("[modal-club-view] [club-album-list] [gallery]").each(function() {
+            $(this).click(function() {
+                load_zoom_image($(this).attr("gallery"));
+            });
+        });
+
+        $("[modal-club-view] [club-album-list] [delete-gallery]").each(function() {
+            $(this).click(function() {
+                var $t = $(this);
+                confirm("确认删除这张图片吗?", function() {
+                    var json = {};
+                    json.component = "club";
+                    json.action = "delete-gallery";
+                    json.id = PV.current_club;
+                    json.image_id = $t.attr("delete-gallery");
+
+                    json.user_name = PV.AUTH.user.username;
+                    json.token = PV.AUTH.accessToken;
+                    json.user_id = PV.AUTH.user.uid;
+
+                    $.post("/api", json, function(d) {
+                        toast("操作成功!");
+                        get_club_gallery();
+                    });
+                });
+            });
+        });
+
+    });
+}
+
+
+function get_club_info() {
+    $("[modal-club-view] .modal-content").css("min-height", $(window).height() + "px");
+    var club = PV.club_index[PV.current_club];
+    $("[modal-club-view] [photo]").css("background-image", "url(" + THB(club.photo) + ")");
+    $("[modal-club-view] [idname]").text("(ID:" + club.uid + ")" + club.nickname);
+    $("[modal-club-view] .modal-title").text(club.club_name);
+    $("[modal-club-view] [location]").text(club.province + " • " + club.city);
+    $("[modal-club-view] [ccount]").text(club.ccount + 1);
+
+    $("[modal-club-view] [intro]").text(club.info);
+
+    $("[modal-club-view] [vote-count]").text(club.ulike);
+
+    $("[modal-club-view] [taboola]").taboola("taboola-below-article-widget_stream", "thumbnails-stream", "Below article widget_Stream");
+
+    if (!club.album) {
+        $("[modal-club-view] [album-no]").show();
+    }
+
+    $("[modal-club-view] [address]").text(club.address);
+    $("[modal-club-view] [phone]").text(club.phone);
+
+    if (PV.club_index[PV.current_club].uid == your_info.id) {
+
+        $("[club-show]").hide();
+        $("[club-edit-section]").show();
+    } else {
+        $("[club-edit-section]").hide();
+
+        if (PV.AUTH) {
+            var json = {};
+            json.component = "club";
+            json.action = "check";
+            json.id = PV.current_club;
+
+            json.user_name = PV.AUTH.user.username;
+            json.token = PV.AUTH.accessToken;
+            json.user_id = PV.AUTH.user.uid;
+
+            $("[modal-club-view] [loading]").loading();
+
+            $.post("/api", json, function(d) {
+
+                $("[modal-club-view] [loading]").loading(false);
+
+                if (d.check) {
+                    $("[club-show]").hide();
+                } else {
+
+                    $("[club-show]").show();
+                }
+            });
+
+        } else {
+
+            $("[club-show]").show();
+        }
+    }
+
+
+    get_club_gallery();
+
+
+
+    $("[modal-club-view]").modal("show");
+}
+
+
+
+PV.club_selector = $("[page-section='club']").get(0);
+
+$("[page-section='club']").scroll(function(event) {
+    if ((PV.club_selector.clientHeight + PV.club_selector.scrollTop) >= PV.club_selector.scrollHeight - 200) {
+        if (PV.club_scroll) {
+            return;
+        }
+
+        PV.club_scroll = true;
+
+        $("[page-section='club'] [loading]").loading();
+        setTimeout(function() {
+            get_club_data(1);
+            $("[page-section='club'] [loading]").loading(false);
+        }, 300);
+
+
+        setTimeout(() => {
+            PV.club_scroll = false;
+        }, 1000);
+    }
+});
+</script>
+<script>
+function club_gallery_upload(file) {
+    var reader = new FileReader();
+    var data;
+
+    var fa = file.name.split(".");
+    var format = fa[fa.length - 1];
+
+    format = format.toLowerCase();
+
+    //console.log(format);
+
+    reader.readAsDataURL(file);
+
+
+    var fid = new Date().getTime() + "" + random_number(10);
+
+    PV.MUP[fid] = {
+        count: 0
+    };
+
+    PV.MUP[fid].uploaded = function(d) {
+
+        $("[club-album-list] [fid='" + fid + "'] [shadow]").remove();
+        $("[club-album-list] [fid='" + fid + "']").attr("album-data", d.path);
+
+        var json = {};
+        json.component = "club";
+        json.action = "gallery";
+        json.id = PV.current_club;
+        json.gallery = d.path;
+
+        json.user_name = PV.AUTH.user.username;
+        json.token = PV.AUTH.accessToken;
+        json.user_id = PV.AUTH.user.uid;
+
+        $.post("/api", json, function(d) {
+
+            if (!d.status) {
+                alert(d.message);
+                return;
+            }
+
+            alert("操作成功!");
+
+        });
+    }
+
+    //console.log("dsdddd");
+
+    reader.addEventListener('load', function(e) {
+        //console.log(file);
+        var data1 = e.target.result;
+        //console.log(e);
+        $("[club-album-list]").prepend('<div style="display:inline-block;width:100px;height:100px; position:relative; margin-right:15px;" fid="' + fid + '"><div style="background-image: url(' + data1 + '); height:100px;width:100px;background-size:cover; "></div><div album-layout shadow style="background-color:#000;opacity:0.5;"></div></div>');
+
+    });
+
+    file.action = "product";
+
+    PV_UPLOAD_M_CLUB(file, {
+        size: file.size,
+        id: fid,
+        name: file.name
+    });
+}
+
+$("[club-upload-inputer]").change(function() {
+    var files = $(this).get(0).files;
+
+    for (var fi = 0; fi < files.length; fi++) {
+        var file = files[fi];
+        club_gallery_upload(file);
+    }
+});
+
+
+
+function PV_UPLOAD_M_CLUB(file, data) {
+
+    var json = {};
+
+    //console.log(data);
+    json.name = data.name;
+    json.size = data.size;
+
+    json.piname = PV.AUTH.user.username;
+    json.id = new Date().getTime() + "" + Math.random();
+
+
+    $.post("/check", json, function(d) {
+
+        if (!d.status) {
+            alert(d.message);
+            return;
+        }
+
+        var formData = new FormData();
+
+        formData.append('file', file);
+
+        formData.append("file_key", d.key);
+        formData.append("action", file.action);
+
+        var xhr = new XMLHttpRequest;
+
+        PV.MUP[data.id].xhr = xhr;
+
+        xhr.open('post', "/upload");
+
+        xhr.upload.onprogress = function(ev) {
+            var percent = (ev.loaded / ev.total) * 100;
+            PV.MUP[data.id].count = percent;
+            if (PV.MUP[data.id].uploading) {
+                PV.MUP[data.id].uploading();
+            }
+        }
+
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var dd = JSON.parse(xhr.responseText);
+                //PV.forum_photo=dd.path;
+                //
+
+                if (!dd.status) {
+                    if (PV.MUP[data.id].error) {
+                        PV.MUP[data.id].error(dd.message);
+                    }
+                    return;
+                }
+
+                if (PV.MUP[data.id].uploaded) {
+                    PV.MUP[data.id].uploaded(dd);
+                }
+            }
+
+        }
+
+    });
+}
+</script>

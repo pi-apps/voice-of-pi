@@ -1,0 +1,298 @@
+<div section__enterprise>
+    <div>
+        <div class="text-center d-block  container px-0 position-relative" apply-enterprise>
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/enterprise.jpg" class="w-100" />
+        </div>
+    </div>
+    <div class="container">
+        <div class="mt-3" taboola></div>
+        <div result class="mt-3"></div>
+        <div loading></div>
+    </div>
+</div>
+<script>
+    $("[page-section='enterprise']").append($("[section__enterprise]").html());
+    cache_images();
+</script>
+<script>
+    var enterprise_data;  
+</script>
+<script>
+    $(function() {
+
+        $("[page-section='enterprise'] [loading]").loading();
+
+        var json = {};
+        json.action = "enterprise";
+
+        $.post("/cache", json, function(d) {
+            enterprise_data=d;
+            $("[page-section='enterprise'] [loading]").loading(false);
+            get_enterprise_data(0);
+        });
+        
+    });
+</script>
+<script>
+    PV.enterprise_page=1;
+
+function get_enterprise_data(index)
+{
+    if (index)
+    {
+        PV.enterprise_page++;
+    }
+    else
+    {
+        PV.enterprise_page=1;
+    }
+
+    var count=enterprise_data.length;
+
+    var cc=(PV.enterprise_page-1)*10;
+
+    if (cc+10<count)
+    {
+        count=cc+10;
+    }
+
+    var datastr="";
+
+
+    for (var i=cc;i<count;i++)
+    {
+        if (!enterprise_data[i])
+        {
+            continue;
+        }
+
+        datastr+='<div class="p-2 py-3 d-flex cursor-pointer w-100 align-items-start" go-speaker-2="'+enterprise_data[i].uid+'">';
+            datastr+='<div style="height:100px;width:100px;background: url('+enterprise_data[i].elogo+') no-repeat center center; background-size: cover;display:inline-block;"></div>';
+            datastr+='<div class="pl-3 position-relative" style="width:calc(100% - 100px);height:100%;">';
+                datastr+='<div style="text-align:left;">';
+                    datastr+='<span class="font-4" style="font-weight:500;">';
+                        datastr+=''+enterprise_data[i].ename+'</span>';
+                    datastr+='<div class="text-muted mt-2">';
+                        datastr+=enterprise_data[i].einfo;
+                    datastr+='</div>';
+                datastr+='</div>';
+            datastr+='</div>';
+        datastr+='</div>';
+    }
+
+    if (index)
+    {
+        $("[page-section='enterprise'] [result]").append(datastr);
+    }
+    else
+    {
+        $("[page-section='enterprise'] [result]").html(datastr);
+    }
+
+
+    $("[go-speaker-2]").each(function(){
+        if ($(this).attr("load"))
+        {
+            return;
+        }
+        $(this).attr("load","YES");
+        $(this).click(function(event) {
+            page_index.push({index:"speaker-etp"});
+            loading_show();
+            modal_index++;
+            $("[page-section='speaker-home']").css("z-index",modal_index);
+            $("[page-section='speaker-home']").show();
+            get_speaker_section_info($(this).attr("go-speaker-2"));
+        });
+    });
+
+}
+
+
+PV.etp_selector=$("[page-section='enterprise']").get(0);
+
+$("[page-section='enterprise']").scroll(function(event) {
+        if ((PV.etp_selector.clientHeight + PV.etp_selector.scrollTop) >= PV.etp_selector.scrollHeight - 200) {
+            if (PV.ept_scroll)
+            {
+                return;
+            }
+
+            PV.ept_scroll=true;
+
+            $("[page-section='enterprise'] [loading]").loading();
+            setTimeout(function(){
+                get_enterprise_data(1);
+                $("[page-section='enterprise'] [loading]").loading(false);
+            },300);
+
+
+            setTimeout(() => {
+                PV.ept_scroll=false;
+            }, 1000);
+        }
+});
+
+</script>
+<div class="modal fade" modal-apply-enterprise>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h5 class="modal-title text-uppercase" title>申请企业发言人</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2 text-left">
+                    <div class="font-3-bold"><span>申请条件:</span></div>
+                    <div class="pt-2">1.承诺会定期上传作品，包括视频、文章或者照片</div>
+                    <div class="pt-2">2.承诺会入驻派之声的商城</div>
+                </div>
+                <input type="text" class="form-control" ep-name placeholder="企业名称" maxlength="30" />
+                <textarea placeholder="企业简单介绍" ep-content class="form-control mt-3" style="height: 80px;"></textarea>
+                <div class="btn btn-pi-1 mb-0 py-3 text-center cursor-pointer w-100 mt-3" ep-photo-change>
+                    <div class="cms-font-4">上传您的营业执照</div>
+                    <div class="mt-2" style="color:#eee;">
+                        <font>格式</font>: jpg / png
+                    </div>
+                    <div style="color:#eee;">大小: 小于10M </div>
+                </div>
+                <div class="text-center">
+                    <div photo-uploading-section style="display: none;">
+                        <div class="d-flex justify-content-center w-100">
+                            <p class="loading" style="margin-top:30px;zoom:0.5;">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </p>
+                        </div>
+                        <div class="mt-3">上传进度:<span photo-percent>0</span></div>
+                    </div>
+                    <div class="mt-3" ep-photo-result style="display: none;"></div>
+                </div>
+                <div class="btn btn-pi-1 mb-0 py-3 text-center cursor-pointer w-100 mt-3" ep-photo-change-1>
+                    <div class="cms-font-4">上传您的企业LOGO</div>
+                    <div class="mt-2" style="color:#eee;">
+                        <font>格式</font>: jpg / png
+                    </div>
+                    <div style="color:#eee;">大小: 小于10M </div>
+                    <div style="color:#eee;">尺寸: 512px * 512px (1:1比例)</div>
+                </div>
+                <div class="text-center">
+                    <div photo-uploading-section1 style="display: none;">
+                        <div class="d-flex justify-content-center w-100">
+                            <p class="loading" style="margin-top:30px;zoom:0.5;">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </p>
+                        </div>
+                        <div class="mt-3">上传进度:<span photo-percent-1>0</span></div>
+                    </div>
+                    <div class="mt-3" ep-photo-result-1 style="display: none;"></div>
+                </div>
+                <input type="text" class="form-control mt-3" ep-invite placeholder="推荐人(可以不填)" maxlength="30" />
+                <div class="mt-3 text-center">
+                    <span class="mr-0 py-3 px-5 cms-font-4 btn btn-pi submit w-100" submit>提交</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$("[apply-enterprise]").click(function() {
+    $("[modal-apply-enterprise]").modal("show");
+});
+
+
+$("[ep-photo-change]").click(function() {
+    upload_index = "ep1";
+    $("[skin-input]").trigger('click');
+});
+
+
+$("[ep-photo-change-1]").click(function() {
+    upload_index = "ep2";
+    $("[skin-input]").trigger('click');
+});
+
+
+$("[modal-apply-enterprise] [submit]").click(function() {
+
+    if (!check_pi()) {
+        alert("请先使用Pi Browser登录帐号!");
+        return;
+    }
+
+    var json = {};
+
+    json.component = "enterprise";
+    json.action = "apply";
+
+
+
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+
+    var j = {};
+    j.name = $("[modal-apply-enterprise] [ep-name]").val();
+    j.info = $("[modal-apply-enterprise] [ep-content]").val();
+    j.invite = $("[modal-apply-enterprise] [ep-invite]").val();
+    j.photo = $("[modal-apply-enterprise] [ep-photo-result] img").attr("src");
+    j.photo1 = $("[modal-apply-enterprise] [ep-photo-result-1] img").attr("src");
+    //console.log(j);
+    if (!j.name) {
+        alert("企业名称不能为空!");
+        return;
+    }
+
+
+    if (!j.info) {
+        alert("企业介绍不能为空!");
+        return;
+    }
+
+
+    if (!j.photo) {
+        alert("营业执照不能为空!");
+        return;
+    }
+
+    if (!j.photo1) {
+        alert("LOGO不能为空!");
+        return;
+    }
+
+    j.name = j.name.trim();
+
+
+
+    json.info = JSON.stringify({
+        name: j.name,
+        info: j.info,
+        photo: j.photo,
+        photo1: j.photo1,
+        invite: json.invite
+    });
+
+    loading_show();
+
+    api(json, function(d) {
+        loading_hide();
+        if (!d.status) {
+            alert(d.message);
+        } else {
+            alert("提交成功!", function() {
+                $("[modal-apply-enterprise]").modal("hide");
+            });
+        }
+
+    });
+});
+</script>

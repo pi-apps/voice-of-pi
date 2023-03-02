@@ -1,0 +1,484 @@
+<div section__account>
+    <div class="text-center d-block container px-0" style="aspect-ratio: auto 600 / 144; overflow: hidden;">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/account.jpg" class="w-100" />
+    </div>
+    <div class="px-3 pb-0 pt-3  container px-0" style="font-size:13px;">
+        <div class="row">
+            <div class="col-5 my-2" update-account>ID: <font account-id></font>
+            </div>
+            <div class="col-7 my-2 text-truncate" update-account><span>昵称:</span> <span t-nickname></span></div>
+            <div class="col-5 my-2">关注: <span account-subscribe-count>0</span></div>
+            <div class="col-7 my-2">获赞: <span account-like-count>0</span></div>
+            <div class="col-5 my-2" account-credit><span class="cursor-pointer" style="border-bottom:2px solid #8c3590;">信用:</span> <span>0</span></div>
+            <div class="col-7 my-2" sign-in><span class="cursor-pointer" style="border-bottom:2px solid #8c3590;">签到:</span> <span signin-count>-</span></div>
+        </div>
+        <div class="row" style="font-size:13px;">
+            <div class="col-5 py-2 text-truncate">Pi帐号: <font pi-user-name></font>
+            </div>
+            <div class="col-7 py-2" account-wallet><span class="cursor-pointer" style="border-bottom:2px solid #8c3590;">钱包:</span>
+                <span>
+                    <font t-credit-2 t-credit>0.00000π</font>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-betwen my-2 px-3 container px-0" update-account>
+        <div class="cursor-pointer" style="width:100px;height:100px;background:#eee center center;display: inline-block; background-size:cover; position: relative;" user-photo>
+            <div style="opacity: 0.5; background:#8c3590; position: absolute;width:100%;padding: 5px; text-align: center;color:#fff;bottom:0;">更改照片</div>
+        </div>
+        <div class="px-3 pt-2 mt-0 text-muted" t-info style="max-height:100px;width:calc(100% - 100px); overflow: auto; background:#fefefe;font-size:13px;">
+            填写介绍更容易获得关注, 点击此处添加.
+        </div>
+    </div>
+    <div class="text-center px-3 container">
+        <div taboola class="my-3"></div>
+        <hr />
+    </div>
+    
+    <div class="text-center mt-2 px-3 container px-0">
+        <div class="mt-3">
+            <button class="py-3 btn btn-pi-1 font-3 w-100" go-my-homepage>我的主页</button>
+        </div>
+        <div class="mt-3">
+            <button class="py-3 btn btn-pi font-3 w-100" web-login>网页登录</button>
+        </div>
+        <div class="mt-3">
+            <button class="py-3 btn btn-success font-3 w-100" account-orders>我的订单</button>
+        </div>
+        <div class="mt-3" manager-setting-wrap style="display: none;">
+            <button class="py-3 btn btn-primary font-3 w-100" manager-setting>用户管理</button>
+        </div>
+        <div class="mt-3" my-app-qr style="display: none;">
+            <hr />
+            <div class="text-muted">我的生态二维码</div>
+            <div>
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" qr-src class="img-fluid" />
+            </div>
+            <div class="mt-1">
+                <span class="btn btn-info font-3 w-100 py-3 px-5" download-qr>下载二维码图片</span>
+            </div>
+            <div class="mt-3">
+                <span class="btn btn-primary font-3 w-100 py-3 px-5" go-to-my-app>进入我的生态</span>
+            </div>
+        </div>
+        <div class=" mb-5"></div>
+    </div>
+</div>
+
+<script>
+
+	$("[page-section='account']").append($("[section__account]").html());
+
+    cache_images();
+
+    $("[page-section='account'] [go-to-my-app]").click(function(event) {
+        if (your_info.domain)
+        {
+            window.parent.location.href="https://"+your_info.domain;
+        }
+        else
+        {
+            window.parent.location.href="https://"+your_info.id+".pivoice.app";
+        }
+    });
+
+    $("[sign-in]").each(function() {
+         if ($(this).attr("load"))
+        {
+            return;
+        }
+        $(this).attr("load","OK");
+        $(this).click(function() {
+
+            $("[modal-signin] [alert]").hide();
+            $("[modal-signin]").modal('show');
+            $("[modal-signin] [taboola]").taboola("taboola-signin-section", "thumbnails-stream", "signin widget_Stream");
+            get_signin_result(false);
+            return;
+        });
+    
+    });    
+
+
+
+    function get__account_info()
+    {
+    	var j = {};
+
+	    j.component = "account";
+	    j.action = "GET";
+	    j.user_name = PV.AUTH.user.username;
+	    j.token = PV.AUTH.accessToken;
+	    j.user_id = PV.AUTH.user.uid;
+
+	    api(j, function(d) {
+	        if (d) {
+
+                d.amount=d.amount||0;
+                d.ulike=d.ulike||0;
+                d.subscribe=d.subscribe||0;
+
+	            $("[t-nickname]").text(d.nickname);
+	            $("[account-id]").text(d.id);
+	            $("[t-credit]").text(ntd(d.amount) + "π");
+	            $("[account-subscribe-count]").text(d.subscribe);
+	            $("[account-like-count]").text(d.ulike);
+
+                if (d.info)
+                {
+                    $("[t-info]").text(d.info);
+                }
+
+                
+                if (d.photo) {
+                    $("[user-photo]").css("background-image", "url(" + CDN + d.photo + ")");
+                } else {
+                    $("[user-photo]").css("background-image", "url(" + CDN + "/upfile/asset/nophoto-2.png)");
+                }
+
+                d.signin=d.signin||0;
+
+
+                $("[page-section='account'] [account-credit]").attr("account-credit",your_info.id);
+
+                if (d.admin) {
+                    PV.admin = true;
+                    $("[forbid-chat-who],[manager-setting-wrap],[manager-setting-wrap-1]").css("display", "inline-block");
+                    $("[manager-setting-wrap]").css("display", "block");
+                    $("[admin-section]").show();
+                }
+
+	            $("[signin-count]").text(d.signin + "天");
+	            PV.BUSER = d;
+	            your_info = d;
+
+	            if (your_info.app) {
+	                $("[my-app-qr]").show();
+	                $("[my-app-qr] img[qr-src]").attr("src", "https://cdn.pvfile.com/up/qr/" + your_info.id + ".png?id="+new Date().getTime());
+	                $("[download-qr]").click(function() {
+	                    window.parent.location.href = "https://download.pvfile.com/up/qr/" + your_info.id + ".png?id="+new Date().getTime();
+	                });
+	            }
+	        }
+	    });
+    }
+
+    get__account_info();
+
+
+    $("[account-credit]").each(function(){
+        if ($(this).attr("load"))
+        {
+            return;
+        }
+        $(this).attr("load","OK");
+        $(this).click(function(event) {
+            $("[go-section='credit']:eq(0)").trigger('click');
+        });
+    });
+
+    $("[update-account]").each(function() {
+        if ($(this).attr("load"))
+        {
+            return;
+        }
+        $(this).attr("load","ok");
+        $(this).click(function() {
+            $("[modal-update-account]").modal("show");
+            $("[modal-update-account] [nickname]").val(PV.BUSER.nickname);
+            $("[modal-update-account] [info]").val(PV.BUSER.info);
+        })
+    });   
+
+    $("[page-section='account'] [go-my-homepage]").each(function(){
+        $(this).click(function(){
+            loading_show();
+            modal_index++;
+            $("[page-section='speaker-home']").css("z-index",modal_index);
+            $("[page-section='speaker-home']").show();
+            $("[chatroom-section] [close]").trigger('click');
+            get_speaker_section_info(your_info.id);
+        });
+    });
+</script>
+
+
+
+<div class="modal fade" modal-account-wallet>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header py-2" style="position: sticky;border-radius: 0;top:0;background: #fff;z-index: 100; border-bottom: none;">
+                <h5 class="modal-title text-uppercase" title>我的钱包</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                
+	            <div class="d-flex mb-3 justify-content-between text-center font-3-bold position-relative w-100">
+	                <div class="w-50 py-3 pi-color cursor-pointer" w-category>提币</div>
+	                <div class="w-50 py-3 cursor-pointer" w-category>明细</div>
+	                <div class=" rounded nav-sub" w-category-index style=" position:absolute;opacity: 1; bottom:0; width: 50%; left: 0px;border-bottom:2px solid #8c3590;"></div>
+	            </div>
+
+
+				<div>
+	                <div w-board w-board-0>
+	                	<div class="font-weight-bold">钱包地址</div>
+	                    <textarea placeholder="钱包地址" class="form-control" style="height: 90px;"></textarea>
+	                    <div class="mt-2 font-weight-bold">派币数量</div>
+		                <input type="text" class="form-control mt-2" value="10" placeholder="派币数量" />
+		                <div class="mt-3 text-center"><span class="py-3 px-5 btn btn-pi-1 w-100" get-pi-coin>提币</span></div>
+	                </div>
+	                <div w-board w-board-1 style="display: none;">
+	                  <div loading></div>  
+		              <div wallet-detail-result></div>
+	                </div>
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+
+$("[account-wallet]").click(function(){
+    $("[modal-account-wallet]").modal("show");
+});
+
+
+
+var wallet_index=0;
+
+function get_wallet_result(wallet_index)
+{
+	var json = {};
+
+    json.component="wallet";
+    json.action = "detail";
+
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+    json.index=wallet_index;
+
+    $("[modal-account-wallet] [loading]").loading();
+    api(json, function(d) {
+    	$("[modal-account-wallet] [loading]").loading(false);
+    	var str="";
+        if (d) {
+    
+           for (var i in d)
+           {
+           		var pmt=d[i];
+
+                var tp="收到";
+                if (pmt.wtype==1)
+                {
+                    tp="支出";
+                }
+
+                var color="info";
+                if (pmt.action=="红包")
+                {
+                    color="danger";
+                }
+                if (pmt.action=="派知道")
+                {
+                    color="primary";
+                }
+
+           		str+='<div scroll-reward class="p-2 d-flex justify-content-start align-items-start w-100 cursor-pointer align-items-start my-3" style="background:#f2f2f2;"><div class="d-flex align-items-center" style="width:calc(100% - 39px)"><div style="height:45px;width:45px;background: url('+CDN+pmt.photo+') no-repeat center center; background-size: cover;display:inline-block; border-radius: 3px;" bg-src-2="pmt.photo"></div><span class="font-4 ml-2 text-truncate" style="font-weight:500;">(ID:'+pmt.uid+')'+pmt.nickname+'<div><span class="font-4" style="font-weight:500;"><span class="badge badge-'+color+' mr-1">'+pmt.action+'</span><b>'+tp+'</b>'+(pmt.price)+'π</span></div><div><span class="font-4" style="font-weight:500;">'+(pmt.created_time)+'</span></div></span></div></div>'
+           }
+
+           $("[wallet-detail-result]").html(str);
+        }
+    });
+}
+
+
+$("[w-category]").each(function(d){
+    $(this).click(function(){
+        $("[w-category]").removeClass("pi-color");
+        $(this).addClass("pi-color");
+        $("[w-category-index]").css("left",(d*50)+"%");
+      
+        if (d==1)
+        {
+        	get_wallet_result();
+        }
+        $("[w-board]").fadeOut(200,function(){
+            setTimeout(function(){
+                $("[w-board-"+(d)+"]").fadeIn(200);
+            },150);
+        });
+    });
+});
+
+
+$("[get-pi-coin]").click(function(){
+	alert("该功能尚未开通!");
+});
+
+</script>
+<div class="modal fade" modal-web>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h5 class="modal-title text-uppercase" title>网页登录</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>注意: 每次打开该窗口都会自动更换登录密码.</div>
+                <div class="py-2">
+                    <div><span class="text-muted">网站:</span> https://pivoice.app</div>
+                    <div class="mt-2">
+                        <span class="text-muted">帐号:</span>
+                        <font pi-user-name></font>
+                    </div>
+                    <div password-loading>
+                    </div>
+                    <div class="mt-2" password-show>
+                        <span class="text-muted">密码:</span>
+                        <font pi-user-password></font>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$("[modal-web] [pv-selector] [category]>div").each(function(d) {
+    $(this).click(function() {
+        if (d == 1) {
+            
+        }
+        else
+        {
+            
+        }
+    });
+});
+
+$("[web-login]").click(function() {
+    $("[modal-web]").modal("show");
+    $("[password-loading]").loading();
+    var json = {};
+    json.component = "account";
+    json.action = "UPDATE-PASSWORD";
+
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+
+    $("[pi-user-name]").html(PV.AUTH.user.username);
+
+    api(json, function(d) {
+        if (d.status) {
+
+            $("[password-loading]").loading(false);
+            $("[pi-user-password]").html(d.password);
+            $("[password-show]").show();
+        } else {
+            alert(d.message, "");
+        }
+    });
+});
+</script>
+<div class="modal fade" modal-myorders>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase" title>我的订单 <span my-address class="text-primary font-4 ml-2">收货地址</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                
+                <div loading></div>
+
+                <div result>
+                    <div pv-selector>
+                        <div category>
+                            <div>买入</div>
+                            <div>卖出</div>
+                        </div>
+                        <div result>  
+                            <div>                                
+                            </div>
+                            <div></div>
+                        </div>
+                        <div class="alert text-center alert-secondary">
+                            即将开放!
+                        </div>
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    pv_selector();
+    $(function(){
+        $("[account-orders]").each(function(){
+            $(this).click(function(event) {
+                $("[modal-myorders]").modal("show");  
+            });
+        });
+    });
+</script>
+<div class="modal fade" modal-manager-ex>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h5 class="modal-title text-uppercase" title>管理员界面</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+
+                <div class="d-flex mb-3 justify-content-between text-center position-relative w-100">
+                    <div class="py-3 pi-color cursor-pointer" style="width:50%; font-size:16px;font-weight:500;" mg-category>产品管理</div>
+                    <div class=" py-3 cursor-pointer" style="width:50%; font-size:16px;font-weight:500;" mg-category>聊天管理</div>
+                    <div class=" rounded nav-sub" mg-category-index style=" position:absolute;opacity: 1; bottom:0; width: 50%; left: 0px;border-bottom:2px solid #8c3590;"></div>
+                </div>
+
+                <div class="py-3 text-center" manager-loading style="display: none;">
+		            <p class="loading" style="margin-top:30px;zoom:0.5;">
+		                <span></span>
+		                <span></span>
+		                <span></span>
+		                <span></span>
+		                <span></span>
+		            </p>
+		          </div>
+              
+                <div product-result>
+                  
+                </div>
+
+                <div chat-result style="display: none;">
+                  
+                </div>
+
+
+                <div>
+                    <button class="btn btn-primary w-100 py-2 px-5" refresh-manger>重新刷新</button>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+

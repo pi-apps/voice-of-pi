@@ -1,0 +1,180 @@
+<div section__speaker>
+    <div class="text-center d-block container px-0"  join-speaker>
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/speaker-1.jpg" class="w-100" />
+    </div>
+    
+
+    <div class="container max-width-1200">
+
+        <div taboola class="my-3"></div>
+
+        <div loading></div>
+        
+        <div result></div>
+
+    </div>
+
+</div>
+
+
+
+<div class="modal fade" modal-join-speaker>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase" title>发言人参与</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2 text-left">
+                    <div class="font-3-bold"><span>申请条件:</span></div>
+                    <div class="pt-2">1.必须有自己的YouTube主页</div>
+                    <div class="pt-2">2.必须5个关于派的原创作品</div>
+                    <div class="pt-2">3.视频质量高, 配音清晰明了。</div>
+                </div>
+                <textarea class="form-control text-center" url placeholder="请输入您的YouTube个人主页地址" style="height: 80px;"></textarea>
+                <div class="mt-3 text-center"><a class="mr-0 py-3 px-5 cms-font-5 text-light btn btn-pi submit w-100" submit>提交</a></div>
+                <div class="py-2 text-muted font-6">提交审核确认以后, 系统每天会自动将您的YOUTUBE视频添加到生态应用中。</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $("[page-section='speaker']").append($("[section__speaker]").html());
+    cache_images();
+</script>
+
+
+
+
+
+
+
+<script>
+
+    
+function get_speaker_template()
+{
+    var spstr = "";
+    var speaker_data=PV.speaker_data_cache;
+    for (var i in speaker_data) {
+        if (!speaker_data[i]) {
+            continue;
+        }
+
+        if (speaker_data[i].info)
+        {
+            if (speaker_data[i].info.length>55)
+            {
+                speaker_data[i].info=speaker_data[i].info.substr(0,55)+"...";
+            }
+        }
+
+        spstr += '<div class="p-2 py-3 d-flex cursor-pointer w-100 align-items-start" go-speaker-1="' + speaker_data[i].id + '">';
+        spstr += '<div style="height:100px;width:100px;background: url(' + THB(speaker_data[i].photo) + ') no-repeat center center; background-size: cover;display:inline-block;"></div>';
+        spstr += '<div class="pl-3 position-relative" style="width:calc(100% - 100px);height:100%;">';
+        spstr += '<div style="text-align:left;">';
+        spstr += '<span class="font-4" style="font-weight:500;">' + speaker_data[i].nickname + '</span>';
+        spstr += '<div class="text-muted mt-2">' + speaker_data[i].info + '</div>';
+        spstr += '</div>';
+        spstr += '</div>';
+        spstr += '</div>';
+    }
+
+    $("[page-section='speaker'] [result]").html(spstr);
+
+    $("[page-section='speaker'] [go-speaker-1]").each(function() {
+        $(this).click(function(event) {
+            page_index.push({ index: "speaker-photo" });
+            loading_show();
+            modal_index++;
+            $("[page-section='speaker-home']").css("z-index", modal_index);
+            $("[page-section='speaker-home']").show();
+            get_speaker_section_info($(this).attr("go-speaker-1"));
+        });
+    });
+}
+
+
+function get_cached_speaker_data()
+{
+
+    $("[page-section='speaker'] [taboola]").taboola("taboola-below-article-widget_stream","thumbnails-stream","Below article widget_Stream");
+
+
+    if (PV.speaker_data_cache)
+    {
+        get_speaker_template();
+        return;
+    }
+
+
+    $("[page-section='speaker'] [loading]").loading();
+
+    var json = {};
+    json.component = "speaker";
+    json.action="list";
+
+    //get_pi_price();
+
+    api(json, function(d) {
+        
+        PV.speaker_data_cache = d;
+
+        $("[page-section='speaker'] [loading]").loading(false);
+        get_speaker_template();
+
+    });
+}
+
+get_cached_speaker_data();
+
+
+
+    
+$("[join-speaker]").click(function() {
+    $("[modal-join-speaker]").modal("show");
+});
+
+$("[modal-join-speaker] [submit]").click(function() {
+   
+
+    var json = {};
+    json.action = "JOIN-SPEAKER";
+
+    json.component = "speaker";
+    json.youtube = $("[modal-join-speaker] textarea").val();
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+
+    if (!json.user_name)
+    {
+        alert("您还没有连接到派网络!");
+        return;
+    }
+
+
+    if (json.youtube.toLowerCase().indexOf('youtube.com') < 0) {
+        alert("请输入正确的Youtube主页信息!");
+        return;
+    }
+
+    loading_show();
+
+    api(json, function(d) {
+        loading_hide();
+        if (!d.status) {
+            alert(d.message);
+        } else {
+            alert("提交成功, 待审核完毕, 我们会发消息给您, 谢谢!", "");
+
+        }
+
+    });
+});
+</script>

@@ -1,0 +1,600 @@
+<style>
+    [community] div.selected {
+    background: #fff;
+}
+
+.nav-sub {
+    transition: all .15s;
+    -webkit-transition: all .15s;
+}
+
+[group-chat]>div {
+    border-bottom: 1px solid #fff;
+}
+
+[group-chat]>div:hover {
+    border-bottom: 1px solid #fbb44a !important;
+}
+</style>
+<div section__community>
+    <div class="container px-0">
+        <div class="text-center d-block position-relative" apply-forum>
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/community-9.jpg" class="w-100" />
+            <div person-chat style="position: absolute;left:53%;top:13%;background:#fff;padding:2px;border-radius: 3px;display: flex;">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="width:10px;" />
+            </div>
+            <div person-chat style="position: absolute;left:61%;top:28%;background:#fff;padding:2px;border-radius: 3px;display: flex;">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="width:9px;" />
+            </div>
+            <div person-chat style="position: absolute;left:68.5%;top:16%;background:#fff;padding:2px;border-radius: 3px;display: flex;">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="width:11px;" />
+            </div>
+            <div person-chat style="position: absolute;left:72%;top:33%;background:#fff;padding:2px;border-radius: 3px;display: flex;">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="width:9px;" />
+            </div>
+            <div person-chat style="position: absolute;left:82%;top:29%;background:#fff;padding:2px;border-radius: 3px;display: flex;">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="width:9px;" />
+            </div>
+            <div person-chat style="position: absolute;left:91%;top:17%;background:#fff;padding:2px;border-radius: 3px;display: flex;">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="width:9px;" />
+            </div>
+        </div>
+    </div>
+    <div class="input-group mt-3 container">
+        <input type="text" class="form-control" search-community-input placeholder="搜索社区名称">
+        <div class="input-group-append">
+            <span class="btn-pi-1 btn d-flex align-items-center justify-content-center" search-community-submit style="font-size:13px;width:90px;">搜索</span>
+        </div>
+    </div>
+    <div class="container pb-3 font-3-bold">
+        <div pv-selector="chatroom">
+            <div category>
+                <div style="font-size:1.5rem; font-weight: bold;">平台邀请</div>
+                <div style="font-size:1.5rem; font-weight: bold;">自主申请</div>
+            </div>
+            <div c-taboola-1 class="p-3" style="background: #fff;"></div>
+            <div result>
+                <div>
+                    <div community--1>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <div style="white-space:nowrap;overflow-x: auto;" class="mt-3" pv-button>
+                            <span class="btn btn-pi-1 py-1 mr-2" value="hot">热度排行</span>
+                            <span class="btn btn-outline-secondary py-1 mr-2" value="person">人数排行</span>
+                            <span class="btn btn-outline-secondary py-1" value="new">最新加入</span>
+                        </div>
+                        <div community--2></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div loading class="py-3"></div>
+    </div>
+</div>
+<script>
+    $("[page-section='community']").append($("[section__community]").html());
+    cache_images();
+    pv_selector();
+</script>
+<script>
+    function get_pv_emoji()
+    {
+        if (PV.pv_emojis)
+        {
+            return;
+        }
+
+        PV.pv_emojis=[];
+
+        var logo=get_cache_image('/upfile/asset/mlogo.png');
+        PV.pv_emojis.push(logo);
+
+        for (var i in pv_emoji)
+        {
+            PV.pv_emojis.push(pv_emoji[i]);
+        }
+    }
+
+    function random_chat(selector)
+    {
+
+        get_pv_emoji();
+        
+        selector.fadeOut(200,function(){
+            setTimeout(function(){
+                var index=(parseInt(Math.random()*12));
+                selector.find("img").attr("src",PV.pv_emojis[index]);
+                selector.fadeIn(300);
+            },Math.floor(Math.random()*8)*1000);
+        });
+
+        setTimeout(function(){
+            random_chat(selector);
+        },Math.floor(Math.random()*10)*1000);
+    }
+
+    $("[page-section='community'] [person-chat]").each(function(){
+        var $t=$(this);
+
+        random_chat($t);
+    });
+</script>
+<script>
+    function chatroom_template_single(single_data)
+{
+    var count=numex(single_data.popular);
+
+    var gallery=single_data.gallery;
+
+    if (!gallery)
+    {
+        gallery=get_cache_image("/upfile/asset/photo-1.jpg");
+    }
+    else
+    {
+        gallery=CDN+gallery.split(".")[0]+"-thumb."+gallery.split(".")[1];
+    }
+
+    var info=single_data.info;
+
+    if (!info)
+    {
+       info=" ";
+    }
+    else
+    {
+        info=info.substr(0,50);
+    }
+
+    var str="";
+
+    var index="";
+    if (single_data.index)
+    {
+        var jj={
+            1:'success',
+            2:'warning',
+            3:'info',
+            4:'primary',
+            5:'danger'
+        };
+
+        if (jj[single_data.index])
+        {
+            index="<span style='position:absolute;left:0px;top:0;border-radius:0;font-size:10px;opacity:0.8;' class='badge badge-"+jj[single_data.index]+"'>"+single_data.index+"</span>";
+        }
+        else
+        {
+            index="<span style='position:absolute;left:0px;top:0;border-radius:0;font-size:10px;opacity:0.8;' class='badge badge-light'>"+single_data.index+"</span>";
+        }
+    }
+
+    var admin_str="";
+    var admin_display="";
+    if (single_data.id==419)
+    {
+        admin_str=" admin_chatroom ";
+        admin_display=" style='display:none;' ";
+    }
+
+
+    str+='<div'+admin_str+admin_display+' roomtype="'+single_data.roomtype+'">';
+       str+=' <div class="p-3 mt-3 cursor-pointer w-100 d-flex justify-content-start align-items-start" room-style="2" chatroom="'+single_data.roomname+'" style="background: #fff;">'
+            str+='<div style="width:80px;height:80px;background:url('+gallery+') center center; position:relative; background-size: cover;">'+index+'</div>';
+            str+='<div style="width:calc(100% - 80px);padding-left:10px;">';
+                str+='<div style="font-size:20px;">';
+                    str+=single_data.roomname;
+                str+='</div>'
+                str+='<div class="text-muted text-truncate" style="font-size:13px;">'+info+'&nbsp;</div>';
+                str+='<div class="d-flex justify-content-start align-items-center" style="font-size:20px;">';
+                    str+='<span class="mr-2 d-flex justify-content-start align-items-center" style="width:80px;"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/pi-1.png" style="height:20px;margin-right:5px;" />';
+                        str+=numex(single_data.person)+'</span>';
+                        str+='<span class="d-flex mr-2  justify-content-start align-items-center" style="width:80px;"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/hot.png" style="height:20px;margin-right:5px;" />';
+                        str+=count+'</span>';                   
+                        if (single_data.status)
+                        {
+                            str+='<span class="d-flex justify-content-start align-items-center" style="width:80px;"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/lock.png" style="height:20px;margin-right:5px;" /></span>';
+                        }
+                str+='</div>';
+            str+='</div>';
+        str+='</div>';
+    str+='</div>';
+
+    return str;
+}    
+
+PV.chatroom_page=1;
+
+PV.ROOM_INDEX={};
+
+function chatroom_tempalte(index)
+{
+    var chatroom=chatroom_data;
+
+    var room_1=[];
+    var room_2=[];
+
+    for (var i in chatroom)
+    {
+        if (!chatroom[i].roomtype)
+        {
+            room_1.push(chatroom[i]);
+        }
+        else
+        {
+            var key=$("[page-section='community'] [search-community-input]").val();
+
+            if (key)
+            {
+                //console.log(chatroom[i].roomname);
+                if (chatroom[i].roomname.indexOf(key)==-1)
+                {
+                    continue;
+                }
+            }
+
+            room_2.push(chatroom[i]);
+            OWNROOM[chatroom[i].roomname] = 1;
+            PV.ROOM_INDEX[chatroom[i].roomname]=chatroom[i];
+        }
+    }
+
+    //console.log(room_2);
+
+    var str="";
+    for (var i in room_1)
+    { 
+        /*if (room_1[i].id==419)
+        {
+            continue;
+        } */
+
+            
+        str+=chatroom_template_single(room_1[i]);
+    }
+    $("[community--1]").html(str);
+
+    //console.log(room_2);
+    str="";
+    if ($("[pv-button] .btn-pi-1").attr("value")=='hot')
+    {
+        room_2.sort(function(v1,v2)
+        {
+            if (v1.popular>v2.popular)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        });
+
+        for (var i=0;i<room_2.length;i++)
+        {
+            room_2[i].index=i+1;
+        }
+    }
+
+    if ($("[pv-button] .btn-pi-1").attr("value")=='person')
+    {
+        room_2.sort(function(v1,v2)
+        {
+            if (v1.person>v2.person)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        });
+
+        for (var i=0;i<room_2.length;i++)
+        {
+            delete room_2[i].index;
+        }
+
+    }
+
+
+    if ($("[pv-button] .btn-pi-1").attr("value")=='new')
+    {
+        room_2.sort(function(v1,v2)
+        {
+            if (v1.id>v2.id)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        });
+
+        for (var i=0;i<room_2.length;i++)
+        {
+            delete room_2[i].index;
+        }
+    }
+
+    //console.log(room_2);
+
+    if (index)
+    {
+        PV.chatroom_page++;
+    }
+    else
+    {
+        PV.chatroom_page=1;
+    }
+
+    var count=room_2.length;
+
+    var cc=(PV.chatroom_page-1)*15;
+
+    if (cc+15<count)
+    {
+        count=cc+15;
+    }
+
+    //console.log(cc,count);
+    for (var i=cc;i<count;i++)
+    {
+        str+=chatroom_template_single(room_2[i]);
+    }
+
+    if (index)
+    {
+        $("[community--2]").append(str);
+    }
+    else
+    {
+        $("[community--2]").html(str);
+    }
+    
+
+    open_chatroom_load();
+
+    
+
+    cache_images();
+}
+
+function open_chatroom_load()
+{
+     $("[chatroom]").each(function() {
+        if ($(this).attr("load"))
+        {
+            return;
+        }
+        $(this).attr("load","YES");
+        $(this).click(function() {
+            page_index.push({index:"chatroom"});
+            PV.room_style = parseInt($(this).attr("room-style"));
+            open_chatroom($(this).attr("chatroom"));
+        });
+    });
+}
+
+
+var chatroom_data;
+
+$(function() {
+
+    $("[page-section='community'] [loading]").loading();
+
+    var json = {};
+    json.action = "chatroom";
+
+    $.post("/cache", json, function(d) {
+        chatroom_data=d;
+        chatroom_tempalte();
+        PV.load_chatroom=0;
+        PV.load_chatroom_timer=setInterval(function(){
+            if (PV.load_chatroom>20)
+            {
+                clearInterval(PV.load_chatroom_timer);
+            }
+            PV.load_chatroom++;
+            open_chatroom_load();
+        },500);
+
+        $("[page-section='community'] [loading]").loading(false);
+
+    });
+
+    
+});
+
+$("[pv-selector='chatroom'] [pv-button] .btn").each(function(){
+    $(this).click(function(){
+        $("[pv-selector='chatroom'] [pv-button] .btn").addClass("btn-outline-secondary").removeClass("btn-pi-1");
+        $(this).addClass("btn-pi-1").removeClass("btn-outline-secondary");
+        chatroom_tempalte();
+    });
+});
+
+$("[pv-selector='chatroom'] [category]>div").each(function(d){
+    $(this).click(function(){
+        PV.chatroom_selector=d;
+    });
+});
+
+PV.community_selector=$("[page-section='community']").get(0);
+
+$("[page-section='community']").scroll(function(event) {
+    if (PV.chatroom_selector)
+    {
+        if ((PV.community_selector.clientHeight + PV.community_selector.scrollTop) >= PV.community_selector.scrollHeight - 200) {
+            if (PV.cm_scroll)
+            {
+                return;
+            }
+
+            PV.cm_scroll=true;
+
+            $("[page-section='community'] [loading]").loading();
+            setTimeout(function(){
+                chatroom_tempalte(1);
+                $("[page-section='community'] [loading]").loading(false);
+            },300);
+
+
+            PV.cm_timer=setTimeout(() => {
+                PV.cm_scroll=false;
+            }, 1000);
+        }
+    }
+});
+
+
+function search__community()
+{
+    if ($("[page-section='community'] [category] .selected").index()==1)
+    {
+        chatroom_tempalte(0);
+    }
+    else
+    {
+        chatroom_tempalte(0);
+        $("[page-section='community'] [category] div:eq(1)").trigger('click');
+    }
+}
+
+$("[search-community-input]").keyup(function(){
+    if ($("[search-community-input]").val())
+    {
+        search__community();
+    }
+});
+
+$("[search-community-submit]").click(function(){
+    search__community();
+});
+</script>
+<div class="modal fade" modal-apply-forum>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase" title>申请社区群</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2 text-left">
+                    <div class="font-3-bold"><span>申请条件:</span></div>
+                    <div class="pt-2">1.社区成员超过400人</div>
+                    <div class="pb-2">2.社区截图证明</div>
+                    <div class="pb-2">3.社区名请勿使用特殊符号</div>
+                </div>
+                <input type="text" class="form-control" forum-name placeholder="您的社区名称" maxlength="30" />
+                <div class="btn btn-pi-1 mb-0 py-3 text-center cursor-pointer w-100 mt-3" forum-photo-change>
+                    <div class="cms-font-4">提供您的社区截图</div>
+                    <div class="mt-2" style="color:#eee;">
+                        <font>格式</font>: jpg / png
+                    </div>
+                    <div style="color:#eee;">大小: 小于10M </div>
+                </div>
+                <div photo-upload-section class="text-center">
+                    <div photo-uploading-section style="display: none;">
+                        <div class="d-flex justify-content-center w-100">
+                            <p class="loading" style="margin-top:30px;zoom:0.5;">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </p>
+                        </div>
+                        <div class="mt-3">上传进度:<span photo-percent>0</span></div>
+                    </div>
+                    <div class="mt-3" forum-photo-result style="display: none;"></div>
+                </div>
+                <div class="mt-3 text-center">
+                    <span class="mr-0 py-3 px-5 cms-font-4 btn btn-pi submit w-100" submit>提交</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$("[apply-forum]").click(function() {
+    $("[modal-apply-forum]").modal("show");
+});
+
+
+$("[forum-photo-change]").click(function() {
+    upload_index = "forum";
+    $("[skin-input]").trigger('click');
+});
+
+
+$("[modal-apply-forum] [submit]").click(function() {
+
+    if (!check_pi()) {
+        alert("请先使用Pi Browser登录帐号!");
+        return;
+    }
+
+    var json = {};
+
+    json.component = "community";
+    json.action = "APPLY";
+
+
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+
+    if (!PV.forum_photo) {
+        alert("请提供您的社区图片!");
+        return;
+    }
+
+    let reg = new RegExp("^[a-zA-Z0-9-\u4e00-\u9fa5\.\_]{6,25}$");
+
+
+
+
+    if (!$("[modal-apply-forum] [forum-name]").val()) {
+        alert("社区名称不能为空!");
+        return;
+    }
+
+
+    if (!reg.test($("[modal-apply-forum] [forum-name]").val())) {
+        alert("请勿使用特殊符号或字数不能小于6位数以及大于25位数, 请重新更改昵称, 谢谢!");
+        return;
+    }
+
+    json.info = JSON.stringify({
+        name: $("[modal-apply-forum] [forum-name]").val(),
+        photo: PV.forum_photo
+    });
+
+    loading_show();
+
+    api(json, function(d) {
+        loading_hide();
+        if (!d.status) {
+            alert(d.message);
+        } else {
+            alert("提交成功!", function() {
+                $("[modal-apply-forum]").modal("hide");
+            });
+        }
+
+    });
+});
+
+PV.chatroom_interval = setInterval(function() {
+    if (PV.admin) {
+        $("[admin_chatroom]").show();
+        clearInterval(PV.chatroom_interval);
+    }
+}, 1500);
+</script>
