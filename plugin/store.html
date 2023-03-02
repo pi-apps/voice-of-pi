@@ -1,0 +1,1004 @@
+<div style="height:0.1px; overflow: hidden;position: fixed;top:-12000px;">
+    <input type="file" multiple="multiple" accept=".jpeg,.png,.jpg" store-upload-inputer style="opacity: 0;" />
+</div>
+<div store-data-section>
+    <div class="text-center d-block container px-0 position-relative" style="aspect-ratio: auto 600 / 144; overflow: hidden;">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/local-store-1.jpg" class="w-100" />
+    </div>
+    <div class="container py-3">
+        <div>
+            <div class="d-flex align-items-center">
+                <input type="text" class="form-control" placeholder="搜索" store-saerch style="display: inline-block;width:calc(100% - 230px);" />
+                <span class="btn btn-pi ml-3" style="font-size:11px;width:100px;" store-location>定位查找</span>
+                <span class="btn btn-pi-1 ml-3" style="font-size:11px;width:100px;" add-store>添加线下生态</span>
+            </div>
+        </div>
+        <div style="background: #fff;top:47.5px;width:100%;z-index: 100;  " class="mt-3">
+            <div class="  text-left container px-3">
+                <div class=" py-2" style="white-space:nowrap;overflow-x: auto;" store-category>
+                </div>
+            </div>
+        </div>
+        <div taboola class="mt-3"></div>
+        <div result-1></div>
+        <div loading></div>
+    </div>
+</div>
+<div class="modal fade" modal-store-create>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100;">
+                <h5 class="modal-title text-uppercase" title>添加线下生态</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" store-name placeholder="店铺名称" />
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <select class="form-control" store-province>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select class="form-control" store-city>
+                        </select>
+                    </div>
+                </div>
+                <textarea class="form-control mt-2" store-address placeholder="店铺地址" style="height: 60px; resize: none;"></textarea>
+                <input type="text" class="form-control mt-2" store-phone placeholder="店铺电话" />
+                <div class="btn btn-pi-1 mb-0 py-3 text-center mt-2 cursor-pointer w-100" store-photo>
+                    <div class="cms-font-4">上传店铺图片</div>
+                    <div class="mt-2" style="color:#eee;">
+                        <font>格式</font>: jpg / png
+                    </div>
+                    <div style="color:#eee;">大小: 小于10M </div>
+                </div>
+                <div>
+                    <div loading></div>
+                    <div gallery></div>
+                </div>
+                <div class="mt-3 text-center"><a class="mr-0 py-3 px-5 cms-font-5 text-light btn btn-pi submit w-100" submit>提交</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" modal-store-edit>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100;">
+                <h5 class="modal-title text-uppercase" title>修改线下生态</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div store-name class="font-3-bold"></div>
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <select class="form-control" store-province-edit>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select class="form-control" store-city-edit>
+                        </select>
+                    </div>
+                </div>
+                <textarea class="form-control mt-2" store-address placeholder="店铺地址" style="height: 60px; resize: none;"></textarea>
+                <input type="text" class="form-control mt-2" store-phone placeholder="店铺电话" />
+                <div class="btn btn-pi-1 mb-0 py-3 text-center mt-2 cursor-pointer w-100" store-photo>
+                    <div class="cms-font-4">上传店铺图片</div>
+                    <div class="mt-2" style="color:#eee;">
+                        <font>格式</font>: jpg / png
+                    </div>
+                    <div style="color:#eee;">大小: 小于10M </div>
+                </div>
+                <div>
+                    <div loading></div>
+                    <div gallery></div>
+                </div>
+                <div class="mt-3 text-center"><a class="mr-0 py-3 px-5 cms-font-5 text-light btn btn-pi-1 submit w-100" submit>修改</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    PV.store_type=['全部','餐饮','宾馆','百货','服装','家居','健康','旅游','服务'];
+
+
+    $("[modal-store-create] [store-photo]").click(function(){
+        upload_index="store";
+        $("[skin-input]").trigger('click');
+    });
+
+    $("[modal-store-edit] [store-photo]").click(function(){
+        upload_index="store-edit";
+        $("[skin-input]").trigger('click');
+    });
+
+
+
+    $("[modal-store-create] [submit]").click(function(){
+        var json = {};
+    
+        json.component = "store";
+        json.action = "apply";
+
+        if (!$("[modal-store-create] [store-name]").val())
+        {
+            toast("请填写店铺名称!");
+            return;
+        }
+
+
+        if (!$("[modal-store-create] [store-address]").val())
+        {
+            toast("请填写店铺地址!");
+            return;
+        }
+
+        if (!$("[modal-store-create] [store-phone]").val())
+        {
+            toast("请填写店铺电话!");
+            return;
+        }
+        
+        json.info=JSON.stringify({
+            name:$("[modal-store-create] [store-name]").val(),
+            province:$("[modal-store-create] [store-province]").val(),
+            city:$("[modal-store-create] [store-city]").val(),
+            address:$("[modal-store-create] [store-address]").val(),
+            phone:$("[modal-store-create] [store-phone]").val(),
+            photo:PV.store_photo,
+        });
+
+        json.user_name = PV.AUTH.user.username;
+        json.token = PV.AUTH.accessToken;
+        json.user_id = PV.AUTH.user.uid;
+
+        api(json, function(d) {
+            if (!d.status)
+            {
+                alert(d.message);
+                return;
+            }
+
+            alert("操作成功!",function(){
+                $("[modal-store-create]").modal("hide");
+            });
+            $("[modal-store-create] [gallery]").html("");
+            $("[modal-store-create] textarea,[modal-store-create] input").val("");
+            PV.store_photo="";
+        });
+    });
+
+
+    
+</script>
+<div class="modal fade" modal-store-view>
+    <div class="modal-dialog" style="margin:auto; max-width: 800px;">
+        <div class="modal-content" style="border-radius: 0; border:none;">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100; border-bottom: none;">
+                <h5 class="modal-title" title></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0" style="padding-bottom: 80px;">
+                <div class="py-2 d-flex justify-content-betwen w-100 cursor-pointer align-items-center">
+                    <div photo style="height: 85px; width: 85px; background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7) center center / cover no-repeat; display: inline-block;"></div>
+                    <div class="pl-3 position-relative" style="width:calc(100% - 85px);height:85px;">
+                        <div class=" " style="width:100%;">
+                            <span class="text-muted" idname></span>
+                            <div class="text-muted d-flex align-items-center mt-1" location></div>
+                            <div class="mt-1" current-store-type>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div intro class="mt-2 text-muted "></div>
+                <div class="text-muted mt-2">
+                    <div class="mt-2">地址: <span address></span> </div>
+                    <div class="mt-2">电话: <span phone></span> </div>
+                    <div loading></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-6 pr-2">
+                        <span class="w-100 btn btn-pi py-2" go-store-home>店家主页</span>
+                    </div>
+                    <div class="col-6 pl-2">
+                        <span class="w-100 btn btn-pi-1 py-2" store-chat>联系店家</span>
+                    </div>
+                </div>
+                <div class="mt-3" style="height:0.5px;width:100%;background: #eee;opacity: 0.5;"></div>
+                <div taboola class="mt-2"></div>
+                <div class="row mt-3" store-edit-section style="display: none;">
+                    <div class="col-6 pr-2">
+                        <span class="w-100 btn btn-primary py-2" add-store-album>添加相册</span>
+                    </div>
+                    <div class="col-6 pl-2">
+                        <span class="w-100 btn btn-success py-2" store-edit>资料修改</span>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <span class="w-100 btn btn-pi-1 py-2" store-type>修改线下生态分类</span>
+                    </div>
+                </div>
+                <div store-album-list class="mt-3"></div>
+                <div album-loading></div>
+                <div album-result class="mt-3 px-3">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" modal-store-type>
+    <div class="modal-dialog" style="margin:auto; max-width: 800px;">
+        <div class="modal-content" style="border-radius: 0; border:none;">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100; border-bottom: none;">
+                <h5 class="modal-title" title>选择您的线下生态类别</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                <div result>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" modal-store-location>
+    <div class="modal-dialog" style="margin:auto; max-width: 800px;">
+        <div class="modal-content" style="border-radius: 0; border:none;">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100; border-bottom: none;">
+                <h5 class="modal-title" title>定位查找</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                <div presult></div>
+                <div class="mt-3" style="height:0.5px;width:100%;background: #eee;opacity: 0.5;"></div>
+                <div class="font-3-bold mt-3 pb-2">市区</div>
+                <div cresult>
+                </div>
+                <div class="mt-3" style="height:0.5px;width:100%;background: #eee;opacity: 0.5;"></div>
+                <div class="text-center" style="     width: 100%;     bottom: 60px;     left: 0;     background: #fff;     padding-top: 10px;     padding-bottom: 10px !important;">
+                    <hr class="d-none d-md-block"><span class="btn btn-pi font-3 py-3 w-100" search style="max-width: 500px">查找该地区店铺</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$("[modal-store-location] [search]").click(function() {
+    PV.store_location_province = $("[modal-store-location] [presult] .btn-pi").attr("value");
+    PV.store_location_city = $("[modal-store-location] [cresult] .btn-pi").attr("value");
+    $("[modal-store-location]").modal("hide");
+    get_store_data(0);
+});
+
+function store_location_selector() {
+    var str = "";
+    var pindex = 0;
+    var p_store = {};
+    var c_store = {};
+
+    for (var i in PV.store_index) {
+        p_store[PV.store_index[i].province] = p_store[PV.store_index[i].province] || 0;
+        p_store[PV.store_index[i].province]++;
+        c_store[PV.store_index[i].province + "-" + PV.store_index[i].city] = c_store[PV.store_index[i].province + "-" + PV.store_index[i].city] || 0;
+        c_store[PV.store_index[i].province + "-" + PV.store_index[i].city]++;
+    }
+
+    for (var i in province) {
+        var pcount = 0;
+
+        if (p_store[province[i]]) {
+            pcount = p_store[province[i]];
+        }
+
+        var bs = "btn-outline-secondary";
+        if (pindex == 0) {
+            bs = "btn-pi";
+        }
+        pindex++;
+        str += '<span class="btn ' + bs + ' mr-3 mb-2 py-1 px-2" p-index="' + i + '" value="' + province[i] + '">' + province[i] + ' (' + pcount + ')</span>';
+    }
+
+    $("[modal-store-location] [presult]").html(str);
+
+
+    $("[modal-store-location] [presult] [p-index]").each(function() {
+        $(this).click(function() {
+            var str = "";
+            var ccount = 0;
+            var ct = city[$(this).attr("p-index")];
+
+            var pc = p_store[$(this).attr("value")];
+
+            if (!pc) {
+                pc = 0;
+            }
+
+            str += '<span class="btn btn-pi mr-3 mb-2 py-1 px-2" value="">全部' + ' (' + pc + ')</span>';
+
+            for (var i in ct) {
+                var bs = "btn-outline-secondary";
+
+                ccount = 0;
+
+                if (c_store[$(this).attr("value") + "-" + ct[i]]) {
+                    ccount = c_store[$(this).attr("value") + "-" + ct[i]];
+                }
+
+                str += '<span class="btn ' + bs + ' mr-3 mb-2 py-1 px-2" value="' + ct[i] + '">' + ct[i] + ' (' + ccount + ')</span>';
+            }
+
+            $("[modal-store-location] [cresult]").html(str);
+
+            $("[modal-store-location] [cresult] span").each(function() {
+                $(this).click(function() {
+                    $("[modal-store-location] [cresult] span").removeClass("btn-pi").addClass('btn-outline-secondary');
+                    $(this).addClass('btn-pi').removeClass("btn-outline-secondary");
+                });
+            });
+
+            $("[modal-store-location] [presult] span").removeClass("btn-pi").addClass('btn-outline-secondary');
+            $(this).addClass('btn-pi').removeClass("btn-outline-secondary");
+        });
+    });
+
+
+    $("[modal-store-location] [presult] [p-index]:eq(0)").trigger('click');
+}
+</script>
+<script>
+function store_address_auto() {
+    $("[modal-store-create] [store-address]").val($("[store-province]").val() + "" + $("[store-city]").val());
+}
+
+for (var i in province) {
+    $("[store-province]").append('<option value="' + province[i] + '" index="' + i + '">' + province[i] + '</option>');
+}
+
+for (var i in city[0]) {
+    $("[store-city]").append('<option value="' + city[0][i] + '" index="' + i + '">' + city[0][i] + '</option>');
+}
+
+store_address_auto();
+
+$("[store-province]").change(function() {
+    $("[store-city]").html("");
+    var index = $(this).find("option:checked").attr("index");
+    for (var i in city[index]) {
+        $("[store-city]").append('<option value="' + city[index][i] + '" index="' + i + '">' + city[index][i] + '</option>');
+    }
+    store_address_auto();
+});
+
+$("[store-city]").change(store_address_auto);
+
+
+
+
+
+
+$("[page-section='store']").append($("[store-data-section]").html());
+
+for (var i = 0; i < PV.store_type.length; i++) {
+    var btp = "btn-outline-secondary";
+    if (i == 0) {
+        btp = "btn-pi-1";
+    }
+    $("[page-section='store'] [store-category]").append('<span class="btn ' + btp + ' py-1 mr-4">' + PV.store_type[i] + '</span>');
+
+    if (i == 0) {
+        $("[modal-store-type] [result]").append('<div class="row"></div>');
+    } else {
+        $("[modal-store-type] [result] .row").append('<div class="col-6 my-2"><span class="btn btn-outline-secondary py-2 w-100">' + PV.store_type[i] + '</span></div>');
+    }
+
+}
+
+$("[page-section='store'] [store-category] span").each(function() {
+    $(this).click(function() {
+        $("[page-section='store'] [store-category] span").removeClass("btn-pi-1").addClass("btn-outline-secondary");
+        $(this).addClass("btn-pi-1").removeClass("btn-outline-secondary");
+        PV.store_page = 1;
+        get_store_data(0);
+    });
+});
+
+
+$("[modal-store-view] [store-type]").click(function() {
+    $("[modal-store-type]").modal("show");
+});
+
+$("[modal-store-type] [result] span").each(function() {
+    var $t = $(this);
+    $(this).click(function() {
+        confirm("是否确认将您的生态类别改为[" + $t.text() + "]?", function() {
+            var json = {};
+
+            json.component = "store";
+            json.action = "edit_type";
+
+            json.type = $t.text();
+
+            json.user_name = PV.AUTH.user.username;
+            json.token = PV.AUTH.accessToken;
+            json.user_id = PV.AUTH.user.uid;
+
+            api(json, function(d) {
+                alert("操作成功!", "");
+            });
+        });
+    });
+});
+
+
+$("[page-section='store'] [store-saerch]").keyup(function(e) {
+    PV.store_search = $(this).val().split(" ")[0];
+    get_store_data(0);
+});
+
+$("[page-section='store'] [store-location]").click(function(e) {
+    store_location_selector();
+    $("[modal-store-location]").modal("show");
+});
+
+/*
+$("[page-section='store'] [store-submit]").click(function(){
+  
+    get_store_data(0);
+});*/
+
+cache_images();
+pv_selector();
+
+$("[page-section='store'] [pv-selector] [category] div").each(function(d) {
+    $(this).click(function() {
+        PV.store_sort = d;
+        get_store_data(0);
+    });
+});
+
+var json = {};
+json.action = "store";
+PV.store_index = {};
+$("[page-section='store'] [loading]").loading();
+$.post("/cache", json, function(d) {
+
+    PV.store_data = d;
+    for (var i in d) {
+        PV.store_index[d[i].id] = d[i];
+    }
+    $("[page-section='store'] [loading]").loading(false);
+    get_store_data(0);
+});
+
+
+
+
+$("[add-store]").click(function() {
+    $("[modal-store-create]").modal("show");
+});
+
+$("[modal-store-view] [store-chat]").click(function() {
+    open_chatroom("线下生态-" + PV.store_index[PV.current_store].store_name);
+});
+
+$("[modal-store-view] [go-store-home]").click(function() {
+    $("[modal-store-view]").modal("hide");
+    modal_index++;
+    $("[page-section='speaker-home']").css("z-index", modal_index);
+    $("[page-section='speaker-home']").show();
+    get_speaker_section_info(PV.store_index[PV.current_store].uid);
+});
+
+
+
+PV.store_page = 1;
+PV.store_sort = 0;
+
+function get_store_data(index) {
+    if (index) {
+        PV.store_page++;
+    } else {
+        PV.store_page = 1;
+    }
+
+    var datastr = "";
+
+    var store = [].concat(PV.store_data);
+
+    if (PV.store_search) {
+        var temp = [];
+
+        for (var i in store) {
+            if (store[i].store_name.indexOf(PV.store_search) > -1) {
+                temp.push(store[i]);
+            }
+        }
+
+        store = [].concat(temp);
+    }
+
+    if (PV.store_location_province) {
+        var temp = [];
+
+        if (PV.store_location_city) {
+            for (var i in store) {
+                if (store[i].province == PV.store_location_province && store[i].city == PV.store_location_city) {
+                    temp.push(store[i]);
+                }
+            }
+
+            datastr += '<div class="mt-2 text-muted">查找: ' + PV.store_location_province + " - " + PV.store_location_city + '</div>';
+        } else {
+            for (var i in store) {
+                if (store[i].province == PV.store_location_province) {
+                    temp.push(store[i]);
+                }
+            }
+
+            datastr += '<div class="mt-2 text-muted">查找: ' + PV.store_location_province + '</div>';
+        }
+
+        PV.store_location_city = "";
+        PV.store_location_province = "";
+
+        store = [].concat(temp);
+    }
+
+
+
+
+    if (PV.store_sort) {
+        store.sort(function(v1, v2) {
+            if (v1.id > v2.id) {
+                return -1;
+            } else if (v1.id < v2.id) {
+                return 1;
+            } else {
+                return 0;
+            }
+        })
+    } else {
+        store.sort(function(v1, v2) {
+
+            if (v1.ulike > v2.ulike) {
+                return -1;
+            } else if (v1.ulike < v2.ulike) {
+                return 1;
+            } else {
+                return 0;
+            }
+        })
+    }
+
+    var selected_type = $("[store-category] .btn-pi-1").text();
+
+    if (selected_type != "全部") {
+        var temp_store = [];
+
+        for (var i in store) {
+            if (store[i].store_type == selected_type) {
+                temp_store.push(store[i]);
+            }
+        }
+
+        store = temp_store;
+    }
+
+    var count = store.length;
+
+    var cc = (PV.store_page - 1) * 10;
+
+    if (cc + 10 < count) {
+        count = cc + 10;
+    }
+
+
+
+
+    for (var i = cc; i < count; i++) {
+        if (!store[i]) {
+            continue;
+        }
+
+
+        datastr += '<div class="mt-2">';
+        datastr += '<div class="py-2 d-flex justify-content-betwen w-100 cursor-pointer align-items-start" open-store="' + store[i].id + '">';
+        datastr += '<div style="height: 100px; width: 100px; background: url(' + THB(store[i].photo) + ') center center / cover no-repeat; display: inline-block;"></div>';
+        datastr += '<div class="pl-3 position-relative  text-truncate" style="width:calc(100% - 100px);height:100px;">';
+        datastr += '<div class=" " style="width:100%;"><span class="font-3 text-truncate" style="font-weight:500;">' + store[i].store_name + '</span>';
+        datastr += '<div class="text-muted d-flex align-items-center mt-2">' + store[i].province + ' • ' + store[i].city + '</div>';
+        datastr += '</div>';
+
+        datastr += '</div>';
+        datastr += '</div>';
+        datastr += '</div>';
+
+    }
+
+    if (index) {
+        $("[page-section='store'] [result-1]").append(datastr);
+    } else {
+        $("[page-section='store'] [result-1]").html(datastr);
+    }
+
+
+    $("[page-section='store'] [open-store]").each(function() {
+        if ($(this).attr("load")) {
+            return;
+        }
+        $(this).attr("load", "YES");
+        $(this).click(function(e) {
+            PV.current_store = $(this).attr("open-store");
+            get_store_info();
+        });
+    });
+
+}
+
+
+$("[modal-store-view] [add-store-album]").click(function() {
+    $("[store-upload-inputer]").trigger('click');
+});
+
+
+
+
+
+$("[modal-store-edit] [store-province-edit]").change(function() {
+    $("[modal-store-edit] [store-city]").html("");
+    var index = $(this).find("option:checked").attr("index");
+    for (var i in city[index]) {
+        $("[modal-store-edit] [store-city-edit]").append('<option value="' + city[index][i] + '" index="' + i + '">' + city[index][i] + '</option>');
+    }
+    store_address_auto_edit();
+});
+
+$("[modal-store-edit] [store-city-edit]").change(function() {
+    store_address_auto_edit();
+});
+
+function store_address_auto_edit() {
+    $("[modal-store-edit] [store-address]").val($("[store-province-edit]").val() + "" + $("[store-city-edit]").val());
+}
+
+
+$("[modal-store-view] [store-edit]").click(function() {
+    var store = PV.store_index[PV.current_store];
+    $("[modal-store-edit] [store-name]").text(store.store_name);
+    $("[modal-store-edit] [store-address]").val(store.address);
+    $("[modal-store-edit] [store-phone]").val(store.phone);
+    $("[modal-store-edit] [store-intro]").val(store.info);
+
+    for (var i in province) {
+        $("[modal-store-edit] [store-province-edit]").append('<option value="' + province[i] + '" index="' + i + '">' + province[i] + '</option>');
+    }
+
+    var province_index = $("[modal-store-edit] [store-province-edit] option[value='" + store.province + "']").attr("index");
+    $("[modal-store-edit] [store-province-edit]").get(0).selectedIndex = province_index;
+
+    for (var i in city[province_index]) {
+        $("[modal-store-edit] [store-city-edit]").append('<option value="' + city[province_index][i] + '" index="' + i + '">' + city[province_index][i] + '</option>');
+    }
+
+    var city_index = $("[modal-store-edit] [store-city-edit] option[value='" + store.city + "']").attr("index");
+    $("[modal-store-edit] [store-city-edit]").get(0).selectedIndex = city_index;
+
+    if (store.photo) {
+        if (store.photo.indexOf(".") > 0) {
+            PV.store_photo = store.photo;
+            $("[modal-store-edit] [gallery]").html("<img src='" + CDN + store.photo + "' style='width:50%;max-height:200px;margin-top:10px;' />");
+        }
+    }
+
+
+    $("[modal-store-edit]").modal("show");
+});
+
+
+$("[modal-store-edit] [submit]").click(function() {
+
+    var json = {};
+
+    json.component = "store";
+    json.action = "edit";
+
+    if (!$("[modal-store-edit] [store-phone]").val()) {
+        toast("请填写店铺电话!");
+        return;
+    }
+
+    json.province = $("[modal-store-edit] [store-province-edit]").val();
+    json.city = $("[modal-store-edit] [store-city-edit]").val();
+    json.address = $("[modal-store-edit] [store-address]").val();
+    json.phone = $("[modal-store-edit] [store-phone]").val();
+
+    json.photo = PV.store_photo;
+
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+
+    api(json, function(d) {
+
+        alert("操作成功!", "");
+
+    });
+
+});
+
+function get_store_gallery() {
+    var json = {};
+    json.component = "store";
+    json.action = "get-gallery";
+    json.id = PV.current_store;
+
+    $("[modal-store-view] [album-loading]").loading();
+
+    $.post("/api", json, function(d) {
+
+        $("[modal-store-view] [album-loading]").loading(false);
+
+        var str = '<div class="row" album-result>';
+        d = d.gallery;
+        for (var i in d) {
+            var del = "";
+            if (PV.store_index[PV.current_store].uid == your_info.id) {
+                del = '<span class="badge badge-danger p-2" delete-gallery="' + d[i].id + '" style="position:absolute;right:0;top:0;">X</span>';
+            }
+            str += '<div class="col-4 position-relative mb-3">' + del + '<div album gallery="' + d[i].gallery + '" style="background-image:url(' + THB(d[i].gallery) + ');background-size:cover;width:100%;"></div></div>';
+        }
+
+        str += "</div>"
+
+        $("[modal-store-view] [store-album-list]").html(str);
+
+        $("[modal-store-view] [album-result] [album]").css("height", $("[modal-store-view] [album-result] [album]:eq(0)").width() + "px");
+
+        $("[modal-store-view] [store-album-list] [gallery]").each(function() {
+            $(this).click(function() {
+                load_zoom_image($(this).attr("gallery"));
+            });
+        });
+
+        $("[modal-store-view] [store-album-list] [delete-gallery]").each(function() {
+            $(this).click(function() {
+                var $t = $(this);
+                confirm("确认删除这张图片吗?", function() {
+                    var json = {};
+                    json.component = "store";
+                    json.action = "delete-gallery";
+                    json.id = PV.current_store;
+                    json.image_id = $t.attr("delete-gallery");
+
+                    json.user_name = PV.AUTH.user.username;
+                    json.token = PV.AUTH.accessToken;
+                    json.user_id = PV.AUTH.user.uid;
+
+                    $.post("/api", json, function(d) {
+                        toast("操作成功!");
+                        get_store_gallery();
+                    });
+                });
+            });
+        });
+
+    });
+}
+
+
+function get_store_info() {
+    $("[modal-store-view] .modal-content").css("min-height", $(window).height() + "px");
+    var store = PV.store_index[PV.current_store];
+    $("[modal-store-view] [photo]").css("background-image", "url(" + THB(store.photo) + ")");
+    $("[modal-store-view] [idname]").text("(ID:" + store.uid + ")" + store.nickname);
+    $("[modal-store-view] .modal-title").text(store.store_name);
+    $("[modal-store-view] [location]").text(store.province + " • " + store.city);
+    $("[modal-store-view] [ccount]").text(store.ccount + 1);
+
+    if (store.store_type) {
+        $("[modal-store-view] [current-store-type]").html('<span class="badge badge-primary">' + store.store_type + '</span>');
+    } else {
+        $("[modal-store-view] [current-store-type]").html('');
+    }
+
+
+    $("[modal-store-view] [intro]").text(store.info);
+
+    $("[modal-store-view] [vote-count]").text(store.ulike);
+
+    if (!store.album) {
+        $("[modal-store-view] [album-no]").show();
+    }
+
+    $("[modal-store-view] [address]").text(store.address);
+    $("[modal-store-view] [phone]").text(store.phone);
+
+
+    if (PV.store_index[PV.current_store].uid == your_info.id) {
+        $("[store-edit-section]").show();
+    } else {
+        $("[store-edit-section]").hide();
+    }
+    get_store_gallery();
+
+    $("[modal-store-view] [taboola]").taboola("taboola-below-article-widget_stream", "thumbnails-stream", "Below article widget_Stream");
+
+    $("[modal-store-view]").modal("show");
+}
+
+
+
+PV.store_selector = $("[page-section='store']").get(0);
+
+$("[page-section='store']").scroll(function(event) {
+    if ((PV.store_selector.clientHeight + PV.store_selector.scrollTop) >= PV.store_selector.scrollHeight - 200) {
+        if (PV.store_scroll) {
+            return;
+        }
+
+        PV.store_scroll = true;
+
+        $("[page-section='store'] [loading]").loading();
+        setTimeout(function() {
+            get_store_data(1);
+            $("[page-section='store'] [loading]").loading(false);
+        }, 300);
+
+
+        setTimeout(() => {
+            PV.store_scroll = false;
+        }, 1000);
+    }
+});
+</script>
+<script>
+function store_gallery_upload(file) {
+    var reader = new FileReader();
+    var data;
+
+    var fa = file.name.split(".");
+    var format = fa[fa.length - 1];
+
+    format = format.toLowerCase();
+
+    //console.log(format);
+
+    reader.readAsDataURL(file);
+
+
+    var fid = new Date().getTime() + "" + random_number(10);
+
+    PV.MUP[fid] = {
+        count: 0
+    };
+
+    PV.MUP[fid].uploaded = function(d) {
+
+        $("[store-album-list] [fid='" + fid + "'] [shadow]").remove();
+        $("[store-album-list] [fid='" + fid + "']").attr("album-data", d.path);
+
+        var json = {};
+        json.component = "store";
+        json.action = "gallery";
+        json.id = PV.current_store;
+        json.gallery = d.path;
+
+        json.user_name = PV.AUTH.user.username;
+        json.token = PV.AUTH.accessToken;
+        json.user_id = PV.AUTH.user.uid;
+
+        $.post("/api", json, function(d) {
+
+            if (!d.status) {
+                alert(d.message);
+                return;
+            }
+
+            alert("操作成功!");
+
+        });
+    }
+
+    //console.log("dsdddd");
+
+    reader.addEventListener('load', function(e) {
+        //console.log(file);
+        var data1 = e.target.result;
+        //console.log(e);
+        $("[store-album-list]").prepend('<div style="display:inline-block;width:100px;height:100px; position:relative; margin-right:15px;" fid="' + fid + '"><div style="background-image: url(' + data1 + '); height:100px;width:100px;background-size:cover; "></div><div album-layout shadow style="background-color:#000;opacity:0.5;"></div></div>');
+
+    });
+
+    file.action = "product";
+
+    PV_UPLOAD_M_store(file, {
+        size: file.size,
+        id: fid,
+        name: file.name
+    });
+}
+
+$("[store-upload-inputer]").change(function() {
+    var files = $(this).get(0).files;
+
+    for (var fi = 0; fi < files.length; fi++) {
+        var file = files[fi];
+        store_gallery_upload(file);
+    }
+});
+
+
+
+function PV_UPLOAD_M_store(file, data) {
+
+    var json = {};
+
+    //console.log(data);
+    json.name = data.name;
+    json.size = data.size;
+
+    json.piname = PV.AUTH.user.username;
+    json.id = new Date().getTime() + "" + Math.random();
+
+
+    $.post("/check", json, function(d) {
+
+        if (!d.status) {
+            alert(d.message);
+            return;
+        }
+
+        var formData = new FormData();
+
+        formData.append('file', file);
+
+        formData.append("file_key", d.key);
+        formData.append("action", file.action);
+
+        var xhr = new XMLHttpRequest;
+
+        PV.MUP[data.id].xhr = xhr;
+
+        xhr.open('post', "/upload");
+
+        xhr.upload.onprogress = function(ev) {
+            var percent = (ev.loaded / ev.total) * 100;
+            PV.MUP[data.id].count = percent;
+            if (PV.MUP[data.id].uploading) {
+                PV.MUP[data.id].uploading();
+            }
+        }
+
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var dd = JSON.parse(xhr.responseText);
+                //PV.forum_photo=dd.path;
+                //
+
+                if (!dd.status) {
+                    if (PV.MUP[data.id].error) {
+                        PV.MUP[data.id].error(dd.message);
+                    }
+                    return;
+                }
+
+                if (PV.MUP[data.id].uploaded) {
+                    PV.MUP[data.id].uploaded(dd);
+                }
+            }
+
+        }
+
+    });
+}
+</script>

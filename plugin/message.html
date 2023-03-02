@@ -1,0 +1,154 @@
+<div section__message>
+    <div class="text-center d-block  container px-0" style="aspect-ratio: auto 600 / 144; overflow: hidden;">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/message-2.jpg" class="w-100" />
+    </div>
+    <div class="container px-1">
+        <div class="my-1" taboola></div>
+    </div>
+    <div class="container px-1">
+        <div pv-selector>
+            <div category>
+                <div>私聊</div>
+                <div>社区</div>
+            </div>
+            <div result class="px-2">
+                <div>
+                </div>
+                <div>
+                </div>
+            </div>
+            <div loading></div>
+        </div>
+    </div>
+</div>
+<script>
+$("[page-section='message']").append($("[section__message]").html());
+
+cache_images();
+
+pv_selector();
+
+function GET__message() {
+    $("[page-section='message'] [loading]").loading();
+
+   
+
+    var j = {};
+    j.component = "message";
+    j.action = "get";
+    j.user_name = PV.AUTH.user.username;
+    j.token = PV.AUTH.accessToken;
+    j.user_id = PV.AUTH.user.uid;
+
+    api(j, function(d) {
+
+        $("[page-section='message'] [loading]").loading(false);
+
+        if (!d) {
+            alert("网络问题, 请稍后重试!");
+            return;
+        }
+
+        var str = "";
+        var str1 = "";
+
+        for (var i in d.chatroom) {
+            var chatroom = d.chatroom[i];
+            var roomname = d.chatroom[i].roomname;
+            if (d.chatroom[i].nickname) {
+                roomname = d.chatroom[i].nickname;
+            }
+
+
+            str += '<div class="p-2 d-flex justify-content-start align-items-start w-100 cursor-pointer align-items-start position-relative my-3" style="background:#f2f2f2;" message-chatroom="' + chatroom.roomname + '" message-chatroomex="' + roomname + '" message-id="' + chatroom.id + '">';
+            str += '<div class="d-flex align-items-center" style="width:100%;">';
+            str += '<div style="height:45px;width:45px;background: url(' + THB(chatroom.photo) + ') no-repeat center center; background-size: cover;display:inline-block; border-radius: 3px;"></div>';
+            str += '<div style="width:calc(100% - 45px);">';
+            str += '<span class="ml-2">(ID:' + chatroom.sender + ')' + chatroom.nickname + '</span>';
+            str += '<div><span class="text-muted font-6 ml-2">' + chatroom.viewed_time + '</span></div>';
+            str += '</div>';
+            str += '</div>';
+
+            if (!chatroom.openned) {
+                str += '<span style="position: absolute;right:15px;top:15px;width:5px;height:5px;border-radius: 5px;background: #f00; font-size: 0;" alert-dot></span>';
+            }
+
+            str += '</div>';
+        }
+
+        var str1="";
+
+        for (var i in d.community)
+        {
+        	var chatroom = d.community[i];
+            var roomname = d.community[i].roomname;
+            if (d.community[i].nameex) {
+                roomname = d.community[i].nameex;
+            }
+
+            if (d.community[i].roomname.indexOf("-")>=0)
+            {
+            	continue;
+            }
+
+
+            str1 += '<div class="p-3 mt-2 w-100" style="background: #fff; font-size:18px; font-weight:500;" message-chatroom="' + d.community[i].roomname + '" message-chatroomex="' + roomname + '">' + roomname + '</div>';
+      
+        }
+
+        $("[page-section='message'] [result]>div:eq(0)").html(str);
+
+        $("[page-section='message'] [result]>div:eq(1)").html(str1);
+
+
+        $("[page-section='message'] [message-chatroom]").each(function() {
+            $(this).click(function() {
+                page_index.push({ index: "message" });
+                if (AREA[$(this).attr("message-chatroom")]) {
+                    PV.room_style = 3;
+                } else {
+                    if (isNaN($(this).attr("message-chatroom"))) {
+                        if (OWNROOM[$(this).attr("message-chatroom")]) {
+                            PV.room_style = 2;
+                        } else {
+                            if ($(this).attr("message-chatroom").indexOf(">-<") > 0) {
+                                PV.room_style = 0;
+                            } else {
+                                PV.room_style = 1;
+                            }
+                        }
+
+                    } else {
+                        PV.room_style = 0;
+                    }
+                }
+                open_chatroom($(this).attr("message-chatroom"), $(this).attr("message-chatroomex"));
+                $("[page-section='message'] [result] [alert-dot]").hide();
+
+                if (!$(this).attr("message-id"))
+                {
+                	return;
+                }
+
+                var j = {};
+
+                j.component = "message";
+                j.action = "view";
+                j.user_name = PV.AUTH.user.username;
+                j.token = PV.AUTH.accessToken;
+                j.user_id = PV.AUTH.user.uid;
+                j.message_id = $(this).attr("message-id");
+
+                api(j);
+            });
+        });
+
+
+    });
+}
+
+
+GET__message();
+
+
+</script>

@@ -1,0 +1,593 @@
+<div app-data-section>
+    <div class="text-center d-block container px-0" apply-app>
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/app-2.jpg" class="w-100" />
+
+    </div>
+
+<!--     <div class="container px-1">
+    <div class="my-1" taboola></div>
+</div> -->
+
+    <div style="border-top:1px solid #eee;display: -webkit-box;" class="container px-0">
+        <div app-categories class="text-center" style="background: #eee; width:120px; top:0; min-height: 100vh;">
+           
+                <div class="p-3 cursor-pointer selected" value="all">全部</div>
+                <div class="p-3 cursor-pointer text-success" value="pinetwork">项目方</div>
+                <div class="p-3 cursor-pointer text-primary" value="join">加盟</div>
+                <div class="p-3 cursor-pointer text-danger" value="fuhua">自主</div>
+                
+                <div class="p-3 cursor-pointer" value="hackathon">黑客松</div>
+                <div class="p-3 cursor-pointer" value="shop">商城</div>
+                <div class="p-3 cursor-pointer" value="soical">社交</div>
+                <div class="p-3 cursor-pointer" value="game">游戏</div>
+                <div class="p-3 cursor-pointer" value="service">服务</div>
+            
+        </div>
+        <div class="p-3" style="width:calc(100% - 121px);">
+            <div>
+                <h2 class="pb-0 font-4-bold">仅作参考, 与共识无关, 排名不分先后!</h2>
+            </div>
+            
+            <div class="py-1" loading></div>
+            <div result>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+[app-categories] div.selected {
+    background: #fff;
+}
+</style>
+
+<script>
+$("[page-section='app']").append($("[app-data-section]").html());
+</script>
+
+<script>
+$(function() {
+
+    cache_images();
+
+    var apps = [];
+
+    apps.push({
+        logo: "miloscard.jpg",
+        type: "game,join",
+        title: "米洛斯 (miloscard)",
+        info: "一款玩法超多的卡牌游戏，游戏同时体验极致的算力加成,支持中文和英文、韩文，充值π获得游戏内星星，签到，参与挖矿，开启盲盒，PK升级卡牌交易获得星星 电报群 https://t.me/MilosCard1",
+        url: "https://miloscard.com"
+    });
+
+    apps.push({
+        logo: "workforcepool.jpg",
+        type: "hackathon,service",
+        title: "⼯作池",
+        info: "基于web3.0的招聘⽣态。 找⼯作的⼈可以把⾃⼰的个⼈简历和所找⼯作的要求通过平台发布。招聘的公司可以在平台上应征⼈才。并通过Pi币⽀付。",
+        url: "https://www.workforcepool.com"
+    });
+
+
+    apps.push({
+        logo: "picare.jpg",
+        type: "hackathon,service",
+        title: "Pi安全",
+        info: "Pi安全是通过所有Pi先锋来收集系统或⽣态的漏洞，然后由核⼼团队或开发者来及时处理。",
+        url: "https://picare.cf"
+    });
+
+    apps.push({
+        logo: "pichain.jpg",
+        type: "hackathon,shop",
+        title: "派链商城",
+        info: "基于派公链的第⼀个货品和NFT的全球交易平台",
+        url: "https://www.pichainmall.com"
+    });
+
+    apps.push({
+        logo: "worldofpi.jpg",
+        type: "hackathon,game",
+        title: "消消乐",
+        info: "所有先锋都可以来参加的竞标赛，也可以通过玩游戏来获得Pi币。 <div><b>(注: 该生态只能复制网址进入, 不能直接进入!)</b></div>",
+        url: "https://worldofpi.ga",
+        hide_direct: true
+    });
+
+
+    apps.push({
+        logo: "watugot.jpg",
+        type: "hackathon,service",
+        title: "打折券",
+        info: "零售商家可以通过平台发布⾃⼰商店的打折券，全球的Pi的先锋都可以领取。",
+        url: "https://watugot.org"
+    });
+
+
+    apps.push({
+        logo: "pi-game.jpg",
+        type: "hackathon,game",
+        title: "Pi游戏平台",
+        info: "这个平台可以链接各种不同的游戏，先锋可以充值⾃⼰Pi 币来玩⼉这些游戏。⼤家再也不⽤为了玩⼉不同游戏⽽注册很多不同账户。",
+        url: "https://pi-game.app"
+    });
+
+
+    apps.push({
+        logo: "lgkm.jpg",
+        type: "hackathon,shop",
+        title: "来购酷买",
+        info: "综合⼤型商城，先锋可以购买普通商品以及数字商品。",
+        url: "https://lgkm.net"
+    });
+
+
+    apps.push({
+        logo: "pitogo.jpg",
+        type: "hackathon,service",
+        title: "旅⾏服务",
+        info: "⼀个易于使⽤的旅⾏服务平台，提供各种类型的旅⾏服务，并以Pi币⽀付。",
+        url: "https://www.pitogo.app"
+    });
+
+
+    
+
+
+    apps.push({
+        logo: "piwebinars-1.jpg",
+        type: "hackathon,social",
+        title: "Pi视频",
+        info: "Pi视频是第⼀个去中⼼化的视频平台，⽤户可以上传和观看视频，并挣得PI币。",
+        url: "https://piwebinars.co.uk"
+    });
+
+
+
+    apps.push({
+        logo: "latin-chain.jpg",
+        type: "hackathon,game",
+        title: "拉丁链平台",
+        info: "来⾃拉美洲的Pi公链游戏，打造基于Pi公链的游戏，创造出Pi专属的游戏平台。现在我们拥有⼀下⼏款游戏：填字游戏、贪⻝蛇、国际象棋。",
+        url: "https://latin-chain.com"
+    });
+
+
+     apps.push({
+        logo: "pipet.jpg",
+        type: "hackathon,game",
+        title: "Pi宠物",
+        info: "宠物NFT游戏。",
+        url: "https://pipet.me"
+    });
+
+
+
+    apps.push({
+        logo: "farm.jpg",
+        type: "game",
+        title: "欢乐Pi农场",
+        info: "欢乐Pi农场是基于Pi Network开发的一款模拟经营类游戏。游戏以农场为背景，玩家扮演一个农场的经营者，完成从购买种子到耕种、浇水、施肥、除草、收获果实再到出售给市场的整个过程。在游戏内赚的HPF是派链上的资产token同时可以按照比例兑换成Pi币",
+        url: "https://farm.piapp.art"
+    });
+
+
+    apps.push({
+        logo: "wolf.jpg",
+        type: "game",
+        title: "打灰狼",
+        url: "https://wolf.piapp.art"
+    });
+
+
+    apps.push({
+        logo: "war.jpg",
+        type: "game",
+        title: "Pixel War",
+        url: "https://war.pigames.top"
+    });
+
+
+    apps.push({
+        logo: "bull.jpg",
+        type: "game",
+        title: "Pi Bull",
+        url: "https://pibull.art"
+    });
+
+
+
+
+    apps.push({
+        logo: "pirates.jpg",
+        type: "game",
+        title: "Pirates",
+        url: "https://pirates.piclub.app"
+    });   
+
+
+    apps.push({
+        logo: "pi123-1.png",
+        type: "service",
+        title: "Pi123",
+        info: "应用导航工具",
+        url: "https://www.pi123.net"
+    });
+
+    apps.push({
+        logo: "9d.jpg",
+        type: "service",
+        title: "九天小说",
+        info: "九天小说网(nineday.com),最热门的免费小说网,包括武侠小说,悬疑小说,奇幻小说,网游小说,玄幻小说,言情小说,都市小说等多种类型,这里是小说爱好者的天堂,也是pi先锋为pi赋能的聚集地,我们一起携手,为pi生态建设助力!",
+        url: "https://nineday.com"
+    });
+
+    apps.push({
+        logo: "web38.jpg",
+        type: "service",
+        title: "Web38.cc",
+        info: "Web38.cc是专注于Web3.0、元宇宙、区块链、数字货币等综合性全媒体平台，提供实时的行业资讯与数据分析、全球市场动态、最前沿的知识，为创业者以及投资者赋能，为生态建设助力！",
+        url: "https://web38.cc"
+    });
+
+
+    apps.push({
+        logo: "pinft.jpg",
+        type: "hackathon,service",
+        title: "Pi NFT",
+        info: "Pi公链上第⼀个数字通证（NFT）的创作和交易平台。",
+        url: "https://www.pinft.art"
+    });
+
+
+    apps.push({
+        logo: "pihub.jpg",
+        type: "service",
+        title: "Pi Hub",
+        url: "https://pihub.biz"
+    });
+
+
+    apps.push({
+        logo: "piapp.jpg",
+        type: "service",
+        title: "Pi App",
+        info: "The app store for PiNetwork. PiNetwork 应用商城.",
+        url: "https://piapp.link"
+    });
+
+
+    apps.push({
+        logo: "px.jpg",
+        type: "hackathon,shop",
+        title: "派星商城",
+        info: "专注⼤宗商品的购物平台，⾸家经纪⼈模式的易货平台。",
+        url: "https://paixingshop.com"
+    });
+
+
+    apps.push({
+        logo: "piscrow.jpg",
+        type: "hackathon,service",
+        title: "Pi履约保证",
+        info: "Pi 公链上的第三⽅托管，即买⽅将货款付给买卖双⽅之外的第三⽅，第三⽅收到款项后通知已收到买⽅货款，并同时通知卖⽅发货，卖⽅即可将货物发运给买⽅，买⽅通知第三⽅收到满意的卖⽅货物，第三⽅便将货款付给卖⽅。",
+        url: "https://piscrow.com"
+    });
+
+     apps.push({
+        logo: "piorg.jpg",
+        type: "service",
+        title: "Piorg",
+        url: "https://piorg.io"
+    });
+
+
+    apps.push({
+        logo: "chat.png",
+        type: "pinetwork",
+        title: "官方聊天室",
+        info: "Pi Network项目方官方应用.",
+        url: "https://chat.pi"
+    });
+
+
+    apps.push({
+        logo: "brainstorm.png",
+        type: "pinetwork",
+        title: "头脑风暴",
+        info: "Pi Network项目方官方应用.",
+        url: "https://brainstorm.pi"
+    });
+
+
+    apps.push({
+        logo: "book-1.png",
+        type: "pinetwork",
+        title: "区块链查询",
+        info: "Pi Network项目方官方应用.",
+        url: "https://blockchain.pi"
+    });
+
+
+
+    
+
+     apps.push({
+        logo: "pidoor.jpg",
+        type: "service",
+        title: "Pi Door",
+        url: "https://piiq.network"
+    });
+
+
+    apps.push({
+        logo: "pibbs-1.jpg",
+        type: "soical",
+        title: "来购酷买社区",
+        url: "https://pibbs.chat"
+    });
+
+    apps.push({
+        logo: "pv.jpg",
+        type: "soical",
+        title: "派之声",
+        info: "Pi公链上的第⼀个去中⼼化的社交⾦融平台， 也是发⾔⼈平台。在这个社交平台上，先锋们可以⼀起⽤web3.0⽅式来超越web2.0带给我们的束缚。",
+        url: "https://pivoice.app"
+    });
+
+
+    //$("[page-section='app'] [taboola]").taboola("taboola-app-widget_stream","thumbnails-stream","app widget_Stream");
+
+    $("[page-section='app'] [app-categories] > div").each(function() {
+        $(this).click(function() {
+            $("[page-section='app'] [app-categories] > div").removeClass("selected");
+            $(this).addClass("selected");
+
+
+
+            var val = $(this).attr("value");
+            //console.log(val);
+            $("[page-section='app'] [loading]").loading();
+            $("[page-section='app'] [result]").fadeOut(200);
+
+            setTimeout(function() {
+                
+                var str="";
+
+                var app_index={};
+
+                //console.log(apps);
+
+                for (var i in apps)
+                {
+                    //console.log(types);
+                    var app=apps[i];
+                    var types=app.type.split(",");
+
+
+
+                    for (var ii in types)
+                    {
+                        if (types[ii]==val||val=="all")
+                        {
+                            if (app_index[i])
+                            {
+                                continue;
+                            }
+                            app_index[i]=true;
+                            str+='<div class="row">';
+                                str+='<div class="feature col-12">';
+                                    str+='<div class="mb-2 d-flex align-items-center" app-href="'+app.url+'">';
+                                        str+='<span><img src="/upfile/app/'+app.logo+'" style="height:60px;"></span>';
+                                        str+='<span class="ml-2" style="font-size:20px;font-weight:bold;">'+app.title+'</span>';
+                                    str+='</div>';
+                                    if (app.info)
+                                    {
+                                    str+='<p>';
+                                        str+=app.info;
+                                    str+='</p>';
+                                    }
+                                    str+='<p pv-copy="'+app.url+'">';
+                                        str+=app.url+' <span class="text-primary ml-2">复制网址</span>';
+                                    str+='</p>';
+                                    str+='<div>';
+                                        if (!app.hide_direct)
+                                        {
+                                            str+='<span app-href="'+app.url+'" class="btn btn-pi mb-3 mr-3" style="width:100px;">';
+                                                str+='直接进入';
+                                            str+='</span>';
+                                        }
+
+                                        str+='<span app-chatroom="'+app.title+'" class="btn mb-3 btn-pi-1" style="width:100px;">';
+                                            str+='讨论区';
+                                        str+='</span>';
+                                    str+='</div>';
+                                str+='</div>';
+                            str+='</div>';
+
+                            str+='<hr class="mt-0" />';
+                        }
+                    }
+                }
+
+                if (!str)
+                {
+                    str+='<div class="alert alert-warning text-center">暂无该类别生态!</div>';
+                }
+
+                $("[page-section='app'] [result]").html(str);
+
+                $("[page-section='app'] [result]").fadeIn(200);
+
+                copy_function();
+
+                $("[page-section='app'] [app-chatroom]").each(function(){
+                    $(this).click(function(){
+                        open_chatroom("讨论区 - "+$(this).attr("app-chatroom"));
+                    });
+               });
+
+                $("[page-section='app'] [app-href]").each(function(){
+                    var $t=$(this);
+                    $(this).click(function(){
+                        window.parent.location.href=$t.attr("app-href")+"?date="+new Date().getTime();
+                    });
+                });
+
+                $("[page-section='app'] [loading]").loading(false);
+
+
+            }, 300);
+        });
+    });
+
+    $("[page-section='app'] [app-categories] > div:eq(0)").trigger('click');
+
+
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" modal-apply-app>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase" title>申请加入生态应用</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2 text-left">
+                    <div class="font-3-bold"><span>申请条件:</span></div>
+                    <div class="pt-2">1.您必须是生态应用创始人</div>
+           
+                </div>
+                
+                <input type="text" class="form-control" app-url placeholder="生态应用网址" maxlength="30" />
+
+                <input type="text" class="form-control mt-3" app-name placeholder="生态应用名称" maxlength="30" />
+
+                <textarea placeholder="生态应用介绍" app-content class="form-control mt-3" style="height: 80px;"></textarea>
+                
+                <div class="btn btn-pi-1 mb-0 py-3 text-center cursor-pointer w-100 mt-3" app-photo-change>
+                    <div class="cms-font-4">上传您的生态应用LOGO</div>
+                    <div class="mt-2" style="color:#eee;">
+                        <font>格式</font>: jpg / png
+                    </div>
+                    <div style="color:#eee;">大小: 小于10M </div>
+                </div>
+                <div photo-upload-section class="text-center">
+                    <div photo-uploading-section style="display: none;">
+                        <div class="d-flex justify-content-center w-100">
+                            <p class="loading" style="margin-top:30px;zoom:0.5;">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </p>
+                        </div>
+                        <div class="mt-3">上传进度:<span photo-percent>0</span></div>
+                    </div>
+                    <div class="mt-3" app-photo-result style="display: none;"></div>
+                </div>
+                <div class="mt-3 text-center">
+                    <span class="mr-0 py-3 px-5 cms-font-4 btn btn-pi submit w-100" submit>提交</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    
+
+    $("[apply-app]").click(function(){
+        $("[modal-apply-app]").modal("show");
+    });
+
+    $("[app-photo-change]").click(function() {
+        upload_index="app";
+        $("[skin-input]").trigger('click');
+    });
+
+
+    $("[modal-apply-app] [submit]").click(function(){
+        
+        if (!check_pi())
+        {
+            alert("请先使用Pi Browser登录帐号!");
+            return;
+        }
+
+        var json = {};
+
+        json.component="app";
+        json.action = "apply";
+        
+        json.user_name = PV.AUTH.user.username;
+        json.token=PV.AUTH.accessToken;
+        json.user_id=PV.AUTH.user.uid;
+
+        if (!PV.app_photo)
+        {
+            alert("请提供您的生态应用LOGO!");
+            return;
+        }
+
+        if (!$("[modal-apply-app] [app-url]").val())
+        {
+            alert("生态应用网址不能为空!");
+            return;
+        }
+
+
+        if (!$("[modal-apply-app] [app-name]").val())
+        {
+            alert("生态应用名称不能为空!");
+            return;
+        }
+
+
+        if (!$("[modal-apply-app] [app-content]").val())
+        {
+            alert("生态应用名称不能为空!");
+            return;
+        }
+
+        json.info=JSON.stringify({
+            name:$("[modal-apply-app] [app-name]").val(),
+            url:$("[modal-apply-app] [app-url]").val(),
+            content:$("[modal-apply-app] [app-content]").val(),
+            photo:PV.app_photo
+        });
+
+        loading_show();
+
+        api(json, function(d) {
+            loading_hide();
+            if (!d.status)
+            {
+                alert(d.message);
+            }
+            else
+            {
+                alert("提交成功!",function(){
+                    $("[modal-apply-app]").modal("hide");
+                });
+            }
+           
+        });
+    });
+</script>

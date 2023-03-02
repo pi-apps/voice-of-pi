@@ -1,0 +1,72 @@
+<div section__subsribe>
+    <div class="text-center d-block container px-0" style="aspect-ratio: auto 600 / 144; overflow: hidden;">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/subscription.jpg" class="w-100" />
+    </div>
+    <div class="container">
+        <div taboola class=" py-3"></div>
+    </div>
+    <div class="container">
+        <div loading></div>
+        <div result class="py-2"></div>
+    </div>
+</div>
+<script>
+$("[page-section='subsribe']").html($("[section__subsribe]").html());
+
+cache_images();
+
+var j = {};
+
+j.component = "subscribe";
+j.user_name = PV.AUTH.user.username;
+j.token = PV.AUTH.accessToken;
+j.user_id = PV.AUTH.user.uid;
+
+$("[page-section='subsribe'] [loading]").loading();
+
+
+api(j, function(d) {
+
+    $("[page-section='subsribe'] [loading]").loading(false);
+
+    var str = "";
+    var like = get_cache_image("/upfile/asset/like.png");
+    for (var i in d) {
+        PRODUCT_INDEX[d[i].id] = d[i];
+        var video = d[i];
+        var title = video.title;
+
+        if (title) {
+            if (title.length > 27) {
+                title = title.substr(0, 27) + "...";
+            }
+        }
+
+        var gallery = 'https://i.ytimg.com/vi/' + video.youtube + '/mqdefault.jpg';
+
+        if (video.gallery) {
+            gallery = video.gallery.split(",")[0];
+        }
+
+        if (gallery.indexOf("/up") == 0) {
+            gallery = CDN + gallery;
+        }
+
+        str += '<div class="py-2 d-flex justify-content-betwen w-100 cursor-pointer align-items-start" open-product="' + video.id + '"><div style="height:100px;width:100px;background: url(' + gallery + ') no-repeat center center; background-size: cover;display:inline-block;" bg-src-1="' + gallery + '"></div><div class="pl-3 position-relative" style="width:calc(100% - 100px);height:100px;">    <div class=" text-truncate" style="width:90%;"><span class="font-4" style="font-weight:500;">' + title + '</span><div class="text-muted d-flex align-items-center mt-2"><span class="text-truncate font-5 w-75">' + video.nickname + '</span></div></div>       <div class="text-muted  mt-2 font-5 d-flex w-100 align-items-center justify-content-start" style="position:absolute;bottom:0;left:15px;"><div class="d-flex align-items-center" style="width:60px;"><img src="' + like + '" style="height:15px;" /><span class="ml-1">' + numex(video.ulike) + '</span></div><span>' + (video.created_time) + '</span></div></div> </div>';
+    }
+
+    if (!str) {
+        str = '<div class="alert alert-secondary text-center">请关注更多的发言人获取更多文章!</div>';
+    }
+
+    $("[page-section='subsribe'] [result]").html(str);
+
+    $("[page-section='subsribe'] [open-product]").each(function() {
+        var $t = $(this);
+        $(this).click(function() {
+            open_product($t.attr("open-product"));
+        });
+    });
+
+});
+</script>

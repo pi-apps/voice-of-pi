@@ -1,0 +1,162 @@
+<div section__pinetwork>
+    <div>
+        <div class="text-center d-block container px-0 position-relative">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/pi.jpg" class="w-100" />
+        </div>
+    </div>
+    <div class="container">
+        <div class="mt-3" taboola></div>
+        <div pv-selector>
+            <div category>
+                <div><b>官方新闻</b></div>
+                <div><b>社交帐号</b></div>
+            </div>
+            <div result>
+                <div>
+                    <div loading></div>
+                    <div pi-news-result></div>
+                </div>
+                <div>
+                    <div class="pb-5 font-4">
+                        <div><b>Pi Network(官方网站)</b></div>
+                        <div class="mt-1">https://minepi.com/</div>
+                        <div class="mt-2"><span pv-copy="https://minepi.com" class="btn btn-pi-1 py-1 mr-4">复制网址</span><span href="https://minepi.com" class="btn btn-pi  py-1">
+                                直接进入
+                            </span>
+                        </div>
+                        <div class="mt-3"><b>Twitter(推特)</b></div>
+                        <div class="mt-1">https://twitter.com/PiCoreTeam</div>
+                        <div class="mt-2"><span pv-copy="https://twitter.com/PiCoreTeam" class="btn btn-pi-1 py-1 mr-4">复制网址</span><span href="https://twitter.com/PiCoreTeam" class="btn btn-pi  py-1">
+                                直接进入
+                            </span></div>
+                        <div class="mt-3"><b>Facebook(脸书)</b></div>
+                        <div class="mt-1">https://www.facebook.com/PiCoreTeam</div>
+                        <div class="mt-2"><span pv-copy="https://www.facebook.com/PiCoreTeam" class="btn btn-pi-1 py-1 mr-4">复制网址</span><span href="https://www.facebook.com/PiCoreTeam" class="btn btn-pi  py-1">
+                                直接进入
+                            </span></div>
+                        <div class="mt-3"><b>Youtube(油管)</b></div>
+                        <div class="mt-1">https://youtube.com/c/PiCoreTeam</div>
+                        <div class="mt-2"><span pv-copy="https://youtube.com/c/PiCoreTeam" class="btn btn-pi-1 py-1 mr-4">复制网址</span><span href="https://youtube.com/c/PiCoreTeam" class="btn btn-pi  py-1">
+                                直接进入
+                            </span></div>
+                        <div class="mt-3"><b>Dr. Nicolas Kokkalis (尼古拉斯博士推特)</b></div>
+                        <div class="mt-1">https://twitter.com/nkokkalis</div>
+                        <div class="mt-2"><span pv-copy="https://twitter.com/nkokkalis" class="btn btn-pi-1 py-1 mr-4">复制网址</span><span href="https://twitter.com/nkokkalis" class="btn btn-pi  py-1">
+                                直接进入
+                            </span></div>
+                        <div class="mt-3"><b>Chendiao Fan (范成雕推特)</b></div>
+                        <div class="mt-1">https://twitter.com/Chengdiao</div>
+                        <div class="mt-2"><span pv-copy="https://twitter.com/Chengdiao" class="btn btn-pi-1 py-1 mr-4">复制网址</span><span href="https://twitter.com/Chengdiao" class="btn btn-pi  py-1">
+                                直接进入
+                            </span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" modal-pi-content>
+    <div class="modal-dialog max-width-800">
+        <div class="modal-content">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100;">
+                <h5 class="modal-title text-uppercase" title></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div loading></div>
+                <div result></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$("[page-section='pinetwork']").append($("[section__pinetwork]").html());
+
+cache_images();
+
+pv_selector();
+
+
+
+function get_cached_pinetwork_data() {
+
+    var json = {};
+    json.action = "pinetwork";
+
+    $("[page-section='pinetwork'] [loading]").loading();
+
+    $.post("/cache", json, function(d) {
+
+        $("[page-section='pinetwork'] [loading]").loading(false);
+
+        var str = "";
+
+        PV.pinetwork_news = PV.pinetwork_news || {};
+
+        for (var i in d) {
+
+            PV.pinetwork_news[d[i].id] = d[i];
+
+            str += '<div class="jumbotron">';
+
+            str += '<div style="font-size:1.95rem;font-weight: 500;">';
+            str += d[i].news_date;
+            str += '</div>';
+
+            str += '<p class="lead"><b class="mr-2">原文:</b>';
+            str += d[i].news_info;
+            str += '</p>';
+
+            str += '<hr class="my-4">';
+
+            str += '<p class="lead"><b class="mr-2">中文解读:</b>';
+            str += d[i].read_news;
+            str += '</p>';
+
+
+            if (d[i].content) {
+                str += '<div class="py-3 text-center">';
+                str += '<span class="font-4 text-primary cursor-pointer" pi-content-button="' + d[i].id + '" ndate="' + d[i].news_date + '" style="text-decoration: underline;">查看正文内容</span>';
+                str += '</div>';
+            }
+
+            str += '<p class="lead text-center">';
+            str += '<span class="btn btn-pi w-100 py-3 btn-lg" role="button" news-chatroom="官方新闻 [' + d[i].news_date + ']">讨论这期新闻</span>';
+            str += '</p>';
+
+            str += '</div> ';
+        }
+
+        $("[page-section='pinetwork'] [pi-news-result]").html(str);
+        pinetwork_news_buttons();
+    });
+}
+
+
+get_cached_pinetwork_data();
+
+
+function pinetwork_news_buttons() {
+
+    $("[page-section='pinetwork'] [news-chatroom]").each(function() {
+        $(this).click(function() {
+            open_chatroom($(this).attr("news-chatroom"));
+        });
+    });
+
+    $("[page-section='pinetwork'] [pi-content-button]").each(function() {
+        var $t = $(this);
+        $(this).click(function() {
+            //console.log("message");
+            $("[modal-pi-content]").modal('show');
+            $("[pi-content-loading]").show();
+            $("[modal-pi-content] [title]").html("[" + $t.attr("ndate") + "]正文内容");
+            $("[modal-pi-content] [result]").html((PV.pinetwork_news[$t.attr("pi-content-button")].content));
+        });
+    });
+}
+
+copy_function();
+</script>

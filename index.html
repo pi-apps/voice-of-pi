@@ -1,0 +1,1989 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>派之声 | Pi Voice</title>
+    <meta name="description" content="这是一个基于Pi Network公链的web3.0区块链技术开发的发言人平台, 在web3.0的时代, 每一个人都可以是发言人。 在这个社交平台上, 先锋们可以⼀起⽤web3.0⽅式来超越web2.0带给我们的束缚。">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+     <script language="javascript" src="https://cdn.pivoice.app/upfile/js/jquery.js" type="text/javascript"></script>
+
+<script>
+function tojson(str) {
+    if (!str) {
+        return {};
+    }
+    try {
+        return JSON.parse(str);
+    } catch (e) {
+        return {};
+    }
+}
+
+
+function cookie(name, value) {
+
+
+    if (location.hostname == "localhost"||location.href.indexOf("test")>-1)
+    {
+      
+    }
+    else
+    {
+        if ($(window).width()<1200)
+        {
+            return null;
+        }
+    }
+
+    if (typeof(value) == "undefined") {
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg)) {
+            return unescape(arr[2]);
+        } else {
+            return null;
+        }
+    } else {
+        if (typeof(value) == "object") {
+            var exp = new Date();
+            exp.setTime(exp.getTime() - 1);
+            document.cookie = name + "= " + ";path=/;expires=" + exp.toGMTString();
+        } else {
+            var exp = new Date();
+            exp.setTime(exp.getTime() + 24 * 60 * 60 * 1000 * 3650);
+            document.cookie = name + "=" + escape(value) + ";path=/;expires=" + exp.toGMTString();
+        }
+    }
+}
+
+
+//删除storage("key",null,true);
+function data(key, value, del) {
+    if (typeof(value) == "undefined") {
+        return localStorage.getItem(key);
+    } else {
+        if (!value && del) {
+            localStorage.removeItem(key);;
+            return;
+        }
+        if (typeof(value) == "object") {
+            value = JSON.stringify(value);
+        }
+        localStorage.setItem(key, value);
+
+    }
+}
+
+function dataJson(key) {
+    var val = data(key);
+    if (!val) {
+        return {};
+    } else {
+        return tojson(val);
+    }
+}
+
+
+function time_format(date,mins) {
+
+    if (typeof(date)=="string")
+    {
+        date=new Date(date);
+    }
+
+    if (!date) {
+        date = new Date();
+    }
+
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    if (m < 10) {
+        m = "0" + m;
+    }
+
+    if (d < 10) {
+        d = "0" + d;
+    }
+
+    var hh = date.getHours();
+    var mm = date.getMinutes();
+    var ss = date.getSeconds();
+
+    if (hh < 10) {
+        hh = "0" + hh;
+    }
+
+    if (mm < 10) {
+        mm = "0" + mm;
+    }
+
+    if (ss < 10) {
+        ss = "0" + ss;
+    }
+
+    if (mins)
+    {
+        return y + "/" + m + "/" + d + " " + hh + ":" + mm;
+    }
+
+    return y + "/" + m + "/" + d + " " + hh + ":" + mm + ":" + ss;
+
+
+}
+
+
+
+
+function date_format() {
+
+    date=new Date();
+
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    if (m < 10) {
+        m = "0" + m;
+    }
+
+    if (d < 10) {
+        d = "0" + d;
+    }
+    
+    return y + "/" + m + "/" + d;
+}
+
+
+
+
+function api(j, cb) {
+
+    if (typeof(j) != "object") {
+        j = tojson(j);
+    }
+
+    var p={};
+
+    p=Object.assign(p,j);
+    
+    $.post("/api",p,function(d){
+        if (cb)
+        { 
+            if (d)
+            {
+                cb(d);
+            }else
+            {
+                cb(null);
+            }
+        }
+    }); 
+}
+</script>
+<style>
+[pi-loading] {
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    display: none;
+    height: 100%;
+    width: 100%;
+}
+
+.pi-loading-bg {
+    background: #000;
+    opacity: 0.75;
+    position: fixed;
+    left: 0;
+    height: 100%;
+    z-index: 10001;
+    width: 100%;
+}
+
+.pi-loading-wrap {
+    position: fixed;
+    left: 0;
+    height: 100%;
+    z-index: 10002;
+    width: 100%;
+}
+
+.loading {
+
+    width: 80px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: -50px;
+}
+
+.loading span {
+    display: inline-block;
+    width: 8px;
+    height: 100%;
+    border-radius: 4px;
+    background: #fbb44a;
+    -webkit-animation: load 1s ease infinite;
+}
+
+@-webkit-keyframes load {
+
+    0%,
+    100% {
+        height: 30px;
+        background: #fbb44a;
+    }
+
+    50% {
+        height: 60px;
+        margin: -15px 0;
+        background: #8c3590;
+    }
+
+}
+
+.loading span:nth-child(2) {
+    -webkit-animation-delay: 0.2s;
+}
+
+.loading span:nth-child(3) {
+    -webkit-animation-delay: 0.4s;
+}
+
+.loading span:nth-child(4) {
+    -webkit-animation-delay: 0.6s;
+}
+
+.loading span:nth-child(5) {
+    -webkit-animation-delay: 0.8s;
+}
+</style>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    font-family: "Microsoft YaHei", 微软雅黑, "Microsoft JhengHei", 华文细黑;
+    height: 100%;
+    background: #fff;
+    font-size: 15px;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.btn-pi {
+    color: #fff;
+    background-color: #8c3590;
+    border-color: #8c3590;
+}
+
+.btn-pi:hover {
+    background: #7b2e7f;
+    color: #eee;
+}
+
+
+.btn-pi-1 {
+    color: #fff;
+    background-color: #f4af48;
+    border-color: #f4af48;
+}
+
+.btn-pi-1:hover {
+    background: #dc9d3e;
+    color: #eee;
+}
+
+
+
+.bg-pi {
+    background: linear-gradient(0.25turn, #8C3590, #2C4982);
+}
+
+
+body {
+    padding-top: 55px;
+}
+
+@media (max-width: 990px) {
+    body {
+        padding-top: 48.75px;
+    }
+}
+
+nav img {
+    cursor: pointer;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+button.close {
+    outline: none;
+}
+
+.no-select {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.btn-pink {
+    color: #333;
+    background-color: #f4abaa;
+    border-color: #f4abaa;
+}
+
+.btn-pink:hover {
+    background: #c98988;
+    color: #000;
+}
+
+.btn-pink:focus {
+    box-shadow: 0 0 0 .2rem rgba(203, 111, 110, .5)
+}
+
+
+.footer {
+    width: 100%;
+    background: #1D0A26;
+}
+
+div.product-section:hover div.product-title {
+    color: #8C3590 !important;
+}
+
+
+
+.block-header {
+    background: -webkit-linear-gradient(52deg, #8b3690 0, #2d4982 100%);
+    background: linear-gradient(52deg, #8b3690 0, #2d4982 100%);
+    background-size: 3000%;
+    background-position: 0 100%;
+    -webkit-animation: gradient 8.5s ease-in-out infinite;
+    animation: gradient 8.5s ease-in-out infinite;
+    width: 100%;
+    min-height: 100px;
+    position: relative;
+    padding-bottom: 15px;
+    color: #efefef;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .block-header {
+        padding-bottom: 20px;
+    }
+}
+
+
+@-webkit-keyframes gradient {
+    50% {
+        background-position: 100% 0%;
+    }
+}
+
+.block-header .title {
+    font-size: 1.35rem;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-weight: bold;
+    padding-top: 15px;
+}
+
+.block-header .des {
+    font-size: 0.95rem;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 7px;
+    color: #eee;
+    margin: auto;
+    max-width: 1100px;
+}
+
+@keyframes gradient {
+    50% {
+        background-position: 100% 0%;
+    }
+}
+
+
+@media (min-width: 992px) {
+    [open-product]:hover {
+        color: #8c3590;
+    }
+}
+
+.pi-color {
+    color: #8c3590;
+}
+</style>
+
+
+    <script>
+    var version = "2022.12.19";
+    var plugin_version = "2023.02.25.1240";
+    var PV = {};
+    var CDN = "https://cdn.pvfile.com";
+    var AREA = {};
+    var OWNROOM = {};
+
+    var PRODUCT_INDEX = {};
+
+    if (location.hostname == "localhost" || location.href.indexOf("test") > -1) {
+        //CDN = "";
+    }
+
+    var PS_INDEX = {};
+    var PI_LOGIN_FLAGE = false;
+    var mlogo = "/upfile/asset/mlogo.png";
+    var modal_index = 900;
+
+    var pv_emoji = {};
+
+    if (data(mlogo)) {
+        mlogo = data(mlogo);
+    }
+    $("head").append('<link href="' + mlogo + '" rel="shortcut icon">');
+
+    function random_number(count) {
+        var str = "";
+        for (var i = 0; i < count; i++) {
+            str += "" + Math.floor(Math.random() * 10);
+        }
+        return str;
+    }
+
+    if (data("BSCSS")) {
+        var head = document.getElementsByTagName('HEAD').item(0);
+        var style = document.createElement('link');
+        style.href = data("BSCSS");
+        style.rel = 'stylesheet';
+        style.type = 'text/css';
+        head.appendChild(style);
+    } else {
+        var head = document.getElementsByTagName('HEAD').item(0);
+        var style = document.createElement('link');
+        style.href = CDN+"/upfile/css/bs.css";
+        style.rel = 'stylesheet';
+        style.type = 'text/css';
+        head.appendChild(style);
+        setTimeout(function() {
+            $.get(CDN+"/upfile/css/bs.txt", function(d) {
+                data("BSCSS", d);
+            });
+        }, 5000);
+    }
+
+
+    if (data("BSJS")) {
+        var head = document.getElementsByTagName('HEAD').item(0);
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = data("BSJS");
+        head.appendChild(script);
+    } else {
+        var head = document.getElementsByTagName('HEAD').item(0);
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = CDN+"/upfile/js/bs.js";
+        head.appendChild(script);
+
+        setTimeout(function() {
+            $.get(CDN+"/upfile/js/bs.txt", function(d) {
+                data("BSJS", d);
+            });
+        }, 1000);
+    }
+
+    if (data("HLS")) {
+        var head = document.getElementsByTagName('HEAD').item(0);
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = data("HLS");
+        head.appendChild(script);
+    } else {
+        var head = document.getElementsByTagName('HEAD').item(0);
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = CDN+"/upfile/js/hls.js";
+        head.appendChild(script);
+
+        setTimeout(function() {
+            $.get(CDN+"/upfile/js/hls.txt", function(d) {
+                data("HLS", d);
+            });
+        }, 1000);
+    }
+
+
+    function FILTER(str) {
+        if (!str) {
+            return "";
+        }
+        
+        str = str.replace(/\</ig, "&lt;");
+        str = str.replace(/\>/ig, "&gt;");
+
+        return str;
+    }
+
+    function FLT(str) {
+        if (!str) {
+            return "";
+        }
+
+        str = str.replace(/\<[^\>]*?\>/gm, "");
+        str = str.replace(/\</ig, "&lt;");
+        str = str.replace(/\>/ig, "&gt;");
+
+        return str;
+    }
+
+    function THB(photo) {
+        if (!photo) {
+            return get_cache_image("/upfile/asset/photo-1.jpg");
+        }
+
+        if (photo == "undefined") {
+            return get_cache_image("/upfile/asset/photo-1.jpg");
+        }
+
+        var fphoto = photo.split("/");
+        var bphoto = fphoto[fphoto.length - 1];
+
+        var cphoto = bphoto.split(".")[0] + "-thumb." + bphoto.split(".")[1];
+
+        if (bphoto.split(".")[1] == "mp4") {
+            cphoto = bphoto.split(".")[0] + "/shot.jpg";
+        }
+
+        return CDN + photo.replace(bphoto, cphoto);
+
+    }
+
+    function get_cache_image(path) {
+        var temp = data(path);
+        if (!temp) {
+            temp = path;
+        }
+
+        return temp;
+    }
+
+    function numex(number) {
+        if (number == 0) {
+            return "0";
+        } else if (number > 999 && number <= 9999) {
+            return (number / 1000).toFixed(1) + 'K';
+        } else if (number > 9999 && number <= 999999) {
+            return (number / 10000).toFixed(1) + 'W';
+        } else if (number > 999999 && number <= 999999999) {
+            return (number / 1000000).toFixed(1) + 'M';
+        } else if (number > 999999999) {
+            return (number / 1000000000).toFixed(1) + 'B';
+        }
+        return number;
+
+    }
+
+    function ntd(val) {
+        var num = new Number(val);
+
+        try {
+            num = Math.abs(num);
+            num = (num.toFixed(5).toString());
+        } catch (e) {
+            num = 0;
+        }
+
+        return num;
+
+    }
+
+    function rmbntd(val) {
+        var num = new Number(val);
+
+        try {
+            num = Math.abs(num);
+            num = (num.toFixed(2).toString());
+        } catch (e) {
+            num = "0.00";
+        }
+
+        return num;
+
+    }
+    </script>
+    <style>
+    [taboola],
+    [c-taboola-1] {
+        display: none !important;
+    }
+    </style>
+</head>
+
+<body style="overflow:hidden;">
+    <script>
+var page_index = [];
+window.onpopstate = function(e) {
+
+    if ($("[product-new-section]").css("display") == "block"&&$("[product-new-section]").css("z-index")==modal_index)
+    {
+        $("[product-new-section]").hide();
+        return;
+    }
+
+    if ($(".modal-backdrop").length > 0) {
+        if ($("[product-section]").css("display") == "block") {
+            $("[product-section] [close]").trigger('click');
+            return;
+        }
+        $(".modal").modal("hide");
+        window.history.pushState({ action: "home" }, null);
+        return;
+    }
+
+
+    if ($("[modal-creator]").css("display") == "block") {
+        $("[modal-creator] [close]").trigger('click');
+        window.history.pushState({ action: "home" }, null);
+        return;
+    }
+
+
+    if ($("[modal-product-update]").css("display") == "block") {
+        $("[modal-product-update] [close]").trigger('click');
+        window.history.pushState({ action: "home" }, null);
+        return;
+    }
+
+
+    if ($("[chatroom-section]").css("display") == "block") {
+        $("[chatroom-section] [close]").trigger('click');
+        return;
+    }
+
+
+
+    if ($("[modal-creator-update]").css("display") == "block") {
+        $("[modal-creator-update] [close]").trigger('click');
+        window.history.pushState({ action: "home" }, null);
+        return;
+    }
+
+    if ($("[modal-display]").css("display") != "none") {
+        $("[modal-display]").fadeOut(200);
+        window.history.pushState({ action: "home" }, null);
+        return;
+    }
+
+
+    if ($("[modal-display-1]").css("display") != "none") {
+        $("[modal-display-1]").fadeOut(200);
+        $("[modal-display-1] [display-result]").html("");
+        window.history.pushState({ action: "home" }, null);
+        return;
+    }
+
+    var page = page_index.pop();
+
+    //console.log(page);
+
+    if (!page.index) {
+        $("[product-section] [close]").trigger('click');
+        $("[product-section] [video-embed]").html("");
+        $("[chatroom-section] [close]").trigger('click');
+        back_to_section('home');
+    }
+
+    if (page.index=="home-shop")
+    {
+        $("[product-new-section]").fadeOut(200);
+    }
+
+    //console.log(page);
+    if (page.index == "shop-detail") {
+         back_to_section('shop'); 
+        //$("[product-new-section]").hide();
+    }
+
+
+    if (page.index == "section") {
+        $("[product-section] [close]").trigger('click');
+        $("[product-section] [video-embed]").html("");
+        $("[chatroom-section] [close]").trigger('click');
+
+        if (page.name == "community" || page.name == "subsribe" || page.name == "message" || page.name == "account" || page.name == "home" || page.name == "school" || page.name == "music" || page.name == "art" || page.name == "s1-speaker" || page.name == "s2-speaker" || page.name == "viewpoint" || page.name == "share" || page.name == "news" || page.name == "skill") {
+            back_to_section("home");
+            page_index.push({ index: "section", name: "home" });
+        } else {
+            back_to_section("home");
+            page_index.push({ index: "section", name: "home" });
+        }
+
+    }
+
+    if (page.index == "chatroom") {
+        if (!page.name) {
+            $("[chatroom-section] [close]").trigger('click');
+            back_to_section("community");
+            page_index.push({ index: "section", name: "home" });
+        } else {
+            if (page.name == "chatroom-photo") {
+                open_chatroom(chatroom_name);
+            }
+        }
+    }
+
+
+    if (page.index == "message") {
+        $("[chatroom-section] [close]").trigger('click');
+        back_to_section("message");
+    }
+
+    //console.log(page.index);
+    if (page.index == "shop") {
+        back_to_section("shop");
+        page_index.push({ index: "section", name: "home" });
+    }
+
+    if (page.index == "speaker-photo") {
+        back_to_section("speaker");
+        $("[product-section]").hide();
+        page_index.push({ index: "section", name: "home" });
+    }
+
+
+    if (page.index == "area") {
+        back_to_section("area");
+        $("[chatroom-section] [close]").trigger('click');
+        page_index.push({ index: "section", name: "home" });
+    }
+
+
+    if (page.index == "speaker-etp") {
+        back_to_section("enterprise");
+        $("[product-section]").hide();
+        page_index.push({ index: "section", name: "home" });
+    }
+
+
+    if (page.index == "article") {
+        $("[page-section='speaker-home']").hide();
+        open_product(page.param);
+        page_index.push({ index: "section", name: "home" });
+    }
+
+
+    if (page.index == "new-product") {
+        $("[page-section='speaker-home']").hide();
+        open_new_product(PV.new_product_id);
+        page_index.push({ index: "section", name: "home" });
+    }
+
+
+    if (page.index == "speaker-photo-in") {
+        $("[chatroom-section] [close]").trigger('click');
+    }
+
+};
+</script>
+ 
+    <style>
+.voice {
+    animation: voice-player 2s infinite;
+}
+
+@keyframes voice-player {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.voice-1 {
+    animation: voice-player 2s infinite;
+    animation-delay:1s;
+}
+
+@keyframes voice-player {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.modal-header{padding-top: 0.5rem; padding-bottom: 0.5rem;}
+
+.piprice::before {
+    content: "π";
+     font-size: 80%;
+    margin-right: 2px;
+}
+textarea,input{outline: none !important; box-shadow: none !important; }
+.text-pi-1{color:#f4af48;}
+
+.container{max-width: 600px;}
+</style>
+
+<div class=" d-none d-lg-block">
+    <nav class="navbar navbar-expand-lg fixed-top py-2 bg-pi" nav-header style="z-index: 201;">
+        <div class="container px-0">
+            <a class="d-flex align-items-center justify-content-between" href="/">
+                <span class="d-flex align-items-center justify-content-center position-relative">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/logo.png" style="height:40px;">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/voice-1.png" class="voice" voice-1 style="position: absolute; top:0px;left:27px; height:10px;" />
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/voice-2.png" class="voice-1" voice-2 style="position: absolute; top:0px;left:27px;height:10px;" />
+
+                </span>
+            </a>
+            <div class="d-flex align-items-center pr-4">
+                <div class="font-4 d-none d-lg-block header-links position-relative" top-search>
+                    <input type="text" placeholder="搜索" class="form-control" />
+
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/search.png" style="height:20px;position: absolute;top:6px;right:10px; opacity: 0.75;cursor: pointer;">
+                </div>
+                <div class="d-flex align-items-center cursor-pointer ml-4" language-selector style="width:80px;"></div>
+                <div wl-yes style="display: none;">
+                    <div class="ml-4 text-light d-flex align-items-center cursor-pointer" web2-login><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/exit.png" style="width:20px;" /><span class="ml-2">退出</span></div>
+                </div>
+                <div wl-no style="display: none;">
+                    <div class="ml-4 text-light d-flex align-items-center cursor-pointer" web2-login><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/user-1.png" style="width:20px;" /><span class="ml-2">登录</span></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<div class=" d-block d-lg-none">
+    <nav class="navbar navbar-expand-lg fixed-top py-2 bg-pi" mobile-nav-header style="z-index: 201; height:47.5px;">
+        <div class="container px-0 d-flex align-items-center justify-content-between">
+            <a class="d-flex align-items-center" href="/" logo-link style="width:30px;">
+                <span class="d-flex align-items-center justify-content-center position-relative">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/mlogo.png" style="height:30px;position: absolute;top:-14px;left:0px;">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/voice-1.png" class="voice" voice-1 style="position: absolute; top:-20px;left:24px; height:7px;" />
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/voice-2.png" class="voice-1" voice-2 style="position: absolute; top:-20px;left:24px;height:7px;" />
+                </span>
+            </a>
+            <div class="position-relative" style=" width:calc(100% - 195px);margin-top:0px;" top-search>
+                <input type="text" placeholder="搜索" class="form-control w-100" style="border-radius: 10px; padding-left: 35px; font-size:13px; border:none; box-shadow: none;" />
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/qr.png" style="height:20px;position: absolute;top:6px;left:10px; opacity: 0.75;cursor: pointer;" qr qr-scan>
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/search.png" style="height:20px;position: absolute;top:6px;right:10px; opacity: 0.75;" search>
+            </div>
+            <div class="d-flex align-items-center" language-selector style="width:70px;"></div>
+        
+            <div class="d-inline-block" style="width:60px;margin-top:-2px;">
+                <span class="btn btn-pi-1 w-100 py-1" sign-in style="font-size:12px;">签到</span>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+<input type="file" qr-from-album style="position: fixed;top:-10000px;left:-1000px;"  />
+
+<div class="modal fade" modal-qr>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase" title>扫描二维码</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               
+               <div loading></div>
+
+               <div class="text-center" qr-section>
+                   <div style="overflow: hidden;display: inline-block;border:1px solid #eee; transition:all 0.5s;" qr-scan-section></div>
+               </div>
+
+               <div>
+
+                   <div class="text-center" ablum-qr style="display: none;">
+                       <div class="mt-3">
+                           <span class="btn btn-pi-1 w-100 px-5 py-3 font-3">相册</span>
+                       </div>
+                       <div class="text-muted mt-2">您也可以点击相册按钮找到二维码图片进行扫码</div>
+                   </div>
+               </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+$("[logo-link]").attr("href","/?date="+new Date().getTime());
+
+   
+</script>
+    <div page-section="news" class="font-5 " style="background:#eeeeee;display: none;">
+    
+</div>
+<div page-section="home" style="display: none;">
+    <div home-banner-section class="container px-0 px-lg-3">
+        <div banner-section go-section="news" class="position-relative" style="width:100%;overflow: hidden;">
+            <img class="d-block w-100" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/home-3-2.jpg">
+        </div>
+    </div>
+    <style>
+    .home-news-message {
+        position: absolute;
+        left: 0;
+        top: 30px;
+        max-width: 200px;
+        opacity: 0.9;
+        transform: translateX(500px);
+        transition: transform 15s ease;
+    }
+
+    .home-news-message.trigger {
+        transform: translateX(-380px) !important;
+    }
+    </style>
+    <div pc-live-video>
+    </div>
+    <div class="container mt-2 no-select">
+        <style>
+        [board]>div,
+        [go-section] {
+            cursor: pointer;
+        }
+
+        .rounded-circle[go-section] {
+            box-shadow: 1px 1px 5px #999999;
+        }
+
+        [h--board] [go-section] {
+            width: 80px;
+            height: 80px;
+            text-align: center;
+        }
+        </style>
+        <div class="row text-center mt-3" h--board>
+            <div class="col-3 px-2 my-2">
+                <div class="d-inline-block rounded-circle" go-section="speaker" style="background:#433E88;">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                        <div>
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/conference-1.png" style="width:25px;" />
+                            <div class="text-light" style="font-size:11px;">发⾔⼈</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-2 my-2">
+                <div class="d-inline-block rounded-circle" go-section="community" style="background:#b03fff;">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                        <div>
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/communication-1.png" style="width:25px;" />
+                            <div class="text-light" style="font-size:11px;">社区</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-2 my-2">
+                <div class="d-inline-block rounded-circle" go-section="enterprise" style="background:#5892e0;">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                        <div>
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/merchant-1.png" style="width:25px;" />
+                            <div class="text-light" style="font-size:11px;">企业发言人</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-2 my-2">
+                <div class="d-inline-block rounded-circle" go-section="shop" style="background:#ff418f;">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                        <div>
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/bag-5.png" style="width:25px;" />
+                            <div class="text-light" style="font-size:11px;">生态商城</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-2 my-2">
+                <div class="d-inline-block rounded-circle" go-section="club" style="background:#ffb642;">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                        <div>
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/club-6.png" style="width:25px;" />
+                            <div class="text-light" style="font-size:11px;">俱乐部</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-2 my-2">
+                <div class="d-inline-block rounded-circle" go-section="store" style="background:#407942;">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                        <div>
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/location.png" style="width:25px;" />
+                            <div class="text-light" style="font-size:11px;">线下生态</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-2 my-2">
+                <div class="d-inline-block rounded-circle" go-section="diy" style="background:#42ccef;">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                        <div>
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/app.png" style="width:25px;" />
+                            <div class="text-light" style="font-size:11px;">孵化器</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-2 my-2">
+                <div class="d-inline-block rounded-circle" go-section="area" style="background:#c34043;">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                        <div>
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/plot-1.png" style="width:25px;" />
+                            <div class="text-light" style="font-size:11px;">地区</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-3 container mb-3">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/hackathon-1.jpg" go-section="hackathon" class="w-100" />
+    </div>
+    <div class="container mt-3">
+        <div class="row px-2">
+            <div class="col-6 px-2  mb-3  pb-0 ">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/b1-2.jpg" go-section="pinetwork" class="w-100 " />
+            </div>
+            <div class="col-6 px-2  mb-3  pb-0 ">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/b2-1.jpg" go-section="app" class="w-100" />
+            </div>
+            <div class="col-6 px-2  mb-3  pb-0 ">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/know-1.jpg" go-section="know" class="w-100" />
+            </div>
+            <div class="col-6 px-2  mb-3  pb-0 ">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/love-1.jpg" go-section="love" class="w-100" />
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/banner/invite-2.jpg" go-section="invite" class="w-100" />
+    </div>
+    <div class=" pb-3">
+        <div class="pt-0 container">
+            <div>
+                <div class="d-flex mb-3 justify-content-between text-center font-3-bold position-relative w-100">
+                    <div class="w-50 py-3 pi-color cursor-pointer" h-category>邀请发言人</div>
+                    <div class="w-50 py-3 cursor-pointer" h-category>自主发言人</div>
+                    <div class=" rounded nav-sub" h-category-index style=" position:absolute;opacity: 1; bottom:0; width: 50%; left: 0px;border-bottom:2px solid #8c3590;"></div>
+                </div>
+                <div product-result-1>
+                    <div h-board h-board-0>
+                        <div></div>
+                    </div>
+                    <div h-board h-board-1 style="display: none;">
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="text-center pb-3">
+            <div class="btn btn-pi-1 py-3 font-3 px-5 w-100" style="max-width: 500px;" view-home-article>更多作品</div>
+        </div>
+        <div style="height:0.5px;width:100%;background: #eee;opacity: 0.5;"></div>
+    </div>
+
+    <div homepage-shop-section></div> 
+    
+    <div homepage-reward-section></div>
+
+
+    <div class="container">
+        <div style="height:0.5px;width:100%;background: #eee;opacity: 0.5;"></div>
+    </div>
+    <div class="mt-3">
+        <div class="container cursor-pointer text-center text-muted">
+            <span class=" px-2 py-4" style="font-size:13px;" pv-page="1">关于我们</span>
+            <span class=" px-2 py-4" style="font-size:13px;" pv-page="2">派之声公约</span>
+            <span class=" px-2 py-4" style="font-size:13px;" pv-page="5">免责声明</span>
+        </div>
+        <div class="container cursor-pointer text-center text-muted mt-3">
+            <span class=" px-2 py-4" style="font-size:13px;" go-section="download">资料下载</span>
+            <span class=" px-2 py-4" style="font-size:13px;" go-section="credit">信用查询</span>
+            <span class=" px-2 py-4" style="font-size:13px;" newest-version>最新版本</span>
+        </div>
+    </div>
+</div>
+<div class="footer d-block text-light no-select" style="position: fixed;bottom:0px;width:100%;left:0;z-index: 100;">
+    <div class="container pt-2" mfooter style="background:#1D0A26; padding-bottom: 15px;">
+        <div class="row font-5 text-center">
+            <div class="col-3">
+            	<div class="d-inline-block px-2" go-section="home">
+                    <div>
+                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/home-1.png" style="height:25px;" />
+                    </div>
+                    <span>首页</span>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="d-inline-block px-2" go-section="subsribe">
+                  	<div>
+                		<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/like-3.png" style="height:25px;" />
+                	</div>
+                    <span>关注</span>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="d-inline-block px-2" go-section="message">
+                  	<div style="position: relative;">
+                		<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/message-2.png" style="height:25px;" />
+                        <span style="position: absolute;right:-7px;top:0px;width:5px;height:5px;border-radius: 5px;background: #f00; font-size: 0;display: none;" message-count-alert></span>
+                	</div>
+                    <span>消息</span>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="d-inline-block px-2" go-section="account">
+              		<div>
+                		<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/user-1.png" style="height:25px;" />
+                	</div>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div page-section="subsribe" class="" style="display: none;"></div>
+<div page-section="message" style="display: none; background: #eeeeee;">
+    
+</div>
+<div page-section="account" class="" style="display: none;">
+    
+</div>
+<div page-section="speaker" class="font-5 " style="display: none;"></div>
+<div page-section="community" class="font-5 " style="background:#eeeeee;display: none;"></div>
+<div page-section="enterprise" class="font-5 " style="background:#eeeeee;display: none;"></div>
+<div page-section="shop" class="font-5 " style="background:#eeeeee;display: none;"></div>
+<div page-section="club" class="font-5 " style="background:#eeeeee;display: none;"></div>
+<div page-section="store" class="font-5 " style="background:#eeeeee;display: none;"></div>
+<div page-section="diy" class="font-5 " style="background:#eeeeee;display: none;">    
+</div>
+<div page-section="area" class="font-5 " style="display: none;">
+    
+</div>
+
+
+<div page-section="search" class="" style="display: none;background:#f2f2f2;"></div>
+<div go-section="search"></div>
+<div page-section="pinetwork" class="font-5 " style="display: none;"></div>    
+<div page-section="app" class="font-5 " style="display: none;">
+
+</div>
+<div page-section="know" class="font-5 " style="background:#eeeeee;display: none;">
+</div>
+<div page-section="love" class="font-5 " style="background:#eeeeee;display: none;">
+    
+</div>
+<div page-section="hackathon" class="font-5 " style="display: none;">    
+</div>
+<div page-section="download" style="display: none;"></div>
+<div page-section="credit" class="font-5 " style="display: none;">
+    
+</div>
+<div page-section="invite" class="font-5 " style="display: none;"></div>
+<style>
+[page-section] {
+    width: 100%;
+    height: calc(100vh - 55px);
+    z-index: 100;
+    position: fixed;
+    left: 0;
+    top: 55px;
+    background: #fff;
+    overflow: auto;
+    display: none;
+}
+
+@media (max-width:990px) {
+    [page-section] {
+        width: 100%;
+        height: calc(100vh - 121.75px);
+        z-index: 100;
+        position: fixed;
+        left: 0;
+        top: 47.75px;
+        overflow: auto;
+    }
+}
+</style>
+<script>
+$(document).click(function() {
+    window.history.pushState({ action: "home" }, null);
+});
+
+function section_resize() {
+    var hh = 55;
+    if ($(window).width() < 600) {
+        hh = 47.5;
+    }
+
+    $("[page-section]").css("height", ($(window).height() - hh - $("[mfooter]").parent().height()) + "px");
+
+    PV.resize_timer_index = PV.resize_timer_index || 0;
+    PV.resize_timer_index++;
+    if (PV.resize_timer_index > 10) {
+        clearInterval(PV.resize_timer);
+    }
+}
+
+$(window).resize(section_resize);
+
+PV.resize_timer = setInterval(section_resize, 500);
+
+
+
+function load_plugin(plugin, callback) {
+    PV.plugin = PV.plugin || {};
+
+    if (PV.plugin[plugin]) {
+        if (plugin == "news") {
+            if (typeof(get_cached_news_data) == "function") {
+                get_cached_news_data();
+            }
+        }
+
+        if (plugin == "account") {
+            get__account_info();
+        }
+
+
+        if (plugin == "diy") {
+            load_diy_show_hide();
+            load_pi_app_info();
+        }
+
+        if (plugin == "know") {
+            get_know_list();
+        }
+
+        if (plugin == "message") {
+            GET__message();
+            $("[message-count-alert]").hide();
+        }
+
+
+        if (plugin == "search") {
+            search_category();
+        }
+
+        if (callback) {
+            callback();
+        }
+
+        return;
+    }
+
+    loading_show();
+    $.get("/plugin/" + plugin + "?date=" + new Date().getTime(), function(d) {
+        loading_hide();
+        $("body").append(d);
+
+        if (plugin == "diy") {
+
+            load_diy_show_hide();
+
+        }
+
+        if (plugin == "search") {
+            search_category();
+        }
+
+        PV.plugin[plugin] = 1;
+
+        if (callback) {
+            callback();
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+$(function() {
+
+
+    if (location.hostname == "localhost") {
+        PI_LOGIN_FLAGE = true;
+        PV.STARTED = true;
+    }
+
+
+    $("[go-section]").each(function() {
+        $(this).click(function() {
+
+
+
+            var sec = $(this).attr("go-section");
+
+            if (sec == "home") {
+                PV.toutiao_home = true;
+            } else {
+                PV.toutiao_home = false;
+            }
+
+            if (sec == "pinetwork") {
+                load_plugin("pinetwork");
+            }
+
+            if (sec == "enterprise") {
+                load_plugin("enterprise");
+            }
+
+            if (sec == "hackathon") {
+                load_plugin("hackathon");
+            }
+
+            if (sec == "community") {
+                load_plugin("community");
+            }
+
+
+            if (sec == "club") {
+                load_plugin("club");
+            }
+
+            if (sec == "area") {
+                load_plugin("area");
+            }
+
+
+            if (sec == "store") {
+                load_plugin("store");
+            }
+
+            if (sec == "news") {
+                load_plugin("news");
+            }
+
+            if (sec == "app") {
+                load_plugin("app");
+            }
+
+            if (sec == "diy") {
+                load_plugin("diy");
+            }
+
+            if (sec == "speaker") {
+                load_plugin("speaker");
+            }
+
+
+            if (sec == "know") {
+                load_plugin("know");
+            }
+
+
+            if (sec == "message") {
+                load_plugin("message");
+            }
+
+
+            if (sec == "shop") {
+                load_plugin("shop");
+            }
+
+
+            if (sec == "search") {
+                load_plugin("search");
+            }
+
+
+            if (sec == "subsribe") {
+                load_plugin("subsribe");
+            }
+
+
+            if (sec == "download") {
+                //console.log("message");
+                load_plugin("download");
+            }
+
+            if (sec == "credit") {
+                //console.log("message");
+                load_plugin("credit");
+            }
+
+            if (sec == "love") {
+                //console.log("message");
+                load_plugin("love");
+            }
+
+            if (sec == "account") {
+                //console.log("message");
+                load_plugin("account");
+            }
+
+             if (sec == "invite") {
+                //console.log("message");
+                load_plugin("invite");
+            }
+
+
+            var hh = 55;
+            if ($(window).width() < 600) {
+                hh = 47.5;
+            }
+
+            $("[page-section]").css("height", ($(window).height() - hh - $("[mfooter]").parent().height()) + "px");
+
+
+            var $t = $(this);
+
+            var authed=false;
+            if (PV.AUTH)
+            {
+                
+                if (PV.AUTH.user)
+                {
+                    if (PV.AUTH.user.username)
+                    {
+                        authed=true;
+                    }
+                }
+            }
+
+            if (check_pi()&&!authed)
+            {
+                if ($(this).attr("go-section") == "account" || $(this).attr("go-section") == "subsribe") {
+
+                    if (!PI_LOGIN_FLAGE) {
+                        if (!PV.STARTED) {
+
+                            L_CALLBACK = function() {
+                                modal_index++;
+                                $("[page-section='" + $t.attr("go-section") + "']").css("z-index", modal_index);
+                                $("[page-section='" + $t.attr("go-section") + "']").show();
+                            }
+                            PI_LOGIN();
+                        }
+                        return;
+                    }
+                }
+            }
+
+
+            if (!authed&&!check_pi())
+            {
+                if ($(this).attr("go-section") == "account" || $(this).attr("go-section") == "subsribe"||$(this).attr("go-section") == "message") {
+                    $("[modal-web2-login]").modal("show");
+                    return;
+                }
+            }
+
+
+            $("[page-section='" + $(this).attr("go-section") + "'] img[in-src]").each(function() {
+                $(this).attr("src", $(this).attr("in-src"));
+            });
+
+            page_index.push({ index: "section", name: $(this).attr("go-section") });
+
+            modal_index++;
+
+            $("[page-section='" + $(this).attr("go-section") + "']").css("z-index", modal_index);
+            $("[page-section='" + $(this).attr("go-section") + "']").show();
+
+        });
+    });
+
+
+    $("[go-section='home']").trigger('click');
+    
+
+});
+
+
+function back_to_section(sec) {
+    modal_index++;
+    $("[page-section='" + sec + "']").css("z-index", modal_index);
+    $("[page-section='" + sec + "']").show();
+}
+</script>
+    <script>
+
+    memo={};
+
+    
+
+    $("body").append('<div class="modal fade" id="window-alert-message"><div class="modal-dialog"><div class="modal-content"><div class="modal-body border-none p-0 pb-3"><button type="button"class="close mt-3 mr-3 clearfix" data-dismiss="modal"><span aria-hidden="true">&times;</span></button><div class="text-center cms-font-4 message px-5 mb-3" style="clear:both;"></div><div class="text-center py-3"><button class="btn btn-pi" style="width:100px;" data-dismiss="modal">确定</button></div></div></div></div></div>');
+
+    $("body").append('<div class="modal fade" id="window-sure-message"><div class="modal-dialog"><div class="modal-content"><div class="modal-body border-none p-0 pb-3"><button type="button"class="close mt-3 mr-3 clearfix" data-dismiss="modal"><span aria-hidden="true">&times;</span></button><div class="text-center cms-font-4 message px-5 mb-3" style="clear:both;"></div><div class="text-center py-3"><a href="javascript:" class="btn btn-pi sure-link" style="width:100px;">确定</a href="javascript:"><button class="btn btn-pi-1 ml-3" style="width:100px;" data-dismiss="modal">取消</button></div></div></div></div></div>');
+
+    window.toast=function(msg){
+        var id=new Date().getTime();
+        $("body").append('<div id="'+id+'" class="position-fixed" style="top:40%;left:0%;width:100%;z-index:100000;opacity:0;text-align:center; "><div style="background:#000;color:#fff;border-radius:5px;display:node;max-width:500px;width:80%;display:inline-block;word-break: break-all;word-wrap:break-word;" class=" p-3 text-center">'+msg+'</div></div>');
+        $("#"+id).fadeTo(500,0.7);
+        setTimeout(function(){
+            $("#"+id).fadeOut(500,function(){
+              $("#"+id).remove();  
+            });
+        },2000);
+    }
+
+    window.alert = function(msg) {
+        //console.log("message");
+        $("#window-alert-message .message").html(msg);
+        $("#window-alert-message").modal("show");
+        memo.alert_window_flag = true;
+        if (typeof(arguments[1]) == "string") {
+            var str = arguments[1];
+            $("#window-alert-message").on("hidden.bs.modal", function() {
+                memo.alert_window_flag = false;
+                if (str == "") {
+
+                    location.reload();
+                } else {
+                    //console.log(str);
+                    location.href = str;
+                }
+            });
+        }
+        if (typeof(arguments[1]) == "function") {
+            var a = arguments[1];
+            $("#window-alert-message").on("hidden.bs.modal", function() {
+                a();
+                $("#window-alert-message").off('hidden.bs.modal');
+                $("#window-alert-message").css("z-index", "10400");
+             
+            });
+        }
+    };
+
+
+
+    $("#window-sure-message .sure-link").click(function() {
+        memo.confirm_window_select_yes=true;
+        $("#window-sure-message").modal("hide");
+    });
+
+    window.confirm = function(msg) {
+        //console.log("message");
+        $("#window-sure-message .message").html(msg);
+        $("#window-sure-message").css("z-index", "10400");
+        $("#window-sure-message").modal("show");
+        memo.confirm_window_flag = true;
+        memo.confirm_window_select_yes=false;
+        if (typeof(arguments[1]) == "string") {
+            var str = arguments[1];
+            $("#window-sure-message").on("hidden.bs.modal", function() {
+                if (str == "") {
+                    location.reload();
+                } else {
+                    //console.log(str);
+                    location.href = str;
+                }
+            });
+        }
+        if (typeof(arguments[1]) == "function") {
+            var a=arguments[1];
+            $("#window-sure-message").on("hidden.bs.modal", function() {
+                if (memo.confirm_window_select_yes)
+                {  
+                    a();
+                }
+                $("#window-sure-message").off('hidden.bs.modal');
+                
+            });
+        }
+    };
+
+
+    $(document).keyup(function(e) {
+
+        if ((e.keyCode == 13 || e.keyCode == 27 || e.keyCode == 32) && memo.alert_window_flag) {
+            $("#window-alert-message").modal("hide");
+        }
+
+        if (e.keyCode == 27 && memo.confirm_window_flag) {
+            $("#window-sure-message").modal("hide");
+        }
+
+        if ((e.keyCode == 13 || e.keyCode == 32) && memo.confirm_window_flag) {
+            memo.confirm_window_select_yes=true;
+            $("#window-sure-message").modal("hide");
+        }
+    });
+
+    function modal_index_window()
+    {
+        $(".modal.fade").each(function() {
+            if ($(this).attr("load"))
+            {
+                return;
+            }
+            $(this).attr("load","yes");
+            $(this).on("shown.bs.modal", function() {
+
+                modal_index++;
+                //console.log("====>",modal_index);
+                var $this = $(this);
+                var a = parseInt(modal_index);
+                $(".modal-backdrop:last()").attr("modal-id", a);
+                setTimeout(function() {
+                    $this.css("z-index", "" + ( + modal_index ));
+                    $(".modal-backdrop[modal-id='" + a + "']").css("z-index", "" + (( - 1) + modal_index ));
+                }, 20);
+            });
+
+            $(this).on("hidden.bs.modal", function() {
+
+                if ($(".modal-backdrop").length > 0) {
+                    $("body").addClass("modal-open");
+                }
+                $(this).css("z-index", "10400");
+            });
+        });
+    }
+
+    $(function(){
+
+
+        setInterval(function(){            
+            modal_index_window();
+        },1000);
+
+    });
+
+
+    $(document).keyup(function(e){
+        //console.log(e);
+        if (e.keyCode==27)
+        {
+            if ($(".modal.show").length>0)
+            {
+                var idx=0;
+                $(".modal.show").each(function(){
+                    var cidx=parseInt($(this).css("z-index"));
+                    $(this).attr("top-index",cidx);
+                    if (idx<cidx)
+                    {
+                        idx=cidx;
+                    }
+                });
+                $(".modal[top-index='"+idx+"']").modal("hide");
+                return;
+            }
+            else
+            {
+                if ($("#today").css("display")!="none")
+                {
+                    $("#today").fadeOut(300);
+                    return;
+                }
+
+                $("[memo] [day] [send-event]").css("top",memo.event_height+"px");
+            }
+            
+            
+        }
+    });
+
+
+
+    $("input").attr("autocomplete","new-text");
+
+
+
+
+
+//<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/logo.png" />
+//<div cache-bg="/upfile/asset/logo.png" style="background:url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)"></div>
+
+function cache_images()
+{
+    
+
+    var check_version=false;
+
+    if (data("version")==version)
+    {
+        check_version=true;
+    }
+    else
+    {
+        localStorage.clear();
+        data("version",version);
+    }
+
+
+    $("[cache-bg]").each(function(){
+
+        if ($(this).attr("loaded"))
+        {
+            return;
+        }
+        $(this).attr("loaded","yes");
+
+
+
+        var image=$(this).attr("cache-bg");
+        
+        var dimage=data(image);
+
+        
+        
+        if (dimage&&check_version)
+        {
+            //console.log("==>",image);
+            //console.log("CC=>");
+            $(this).css("background-image","url("+dimage+")");
+        }
+        else
+        {
+            $(this).css("background-image","url("+image+")");
+
+            var img = document.createElement("img");
+    
+            img.src = image;
+
+            img.onload = function() {
+                
+                var cvs = document.createElement("canvas");
+                cvs.width = img.width;
+                cvs.height = img.height;
+                var ctx = cvs.getContext('2d');
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+                var imgdata;
+
+                if (image.indexOf(".png")>0)
+                {
+                     imgdata= cvs.toDataURL("image/png");
+                }
+                else
+                {
+                    imgdata= cvs.toDataURL("image/jpeg");
+                }
+
+                if (imgdata)
+                {
+                    data(image, imgdata);
+                }
+
+            }
+        }
+
+        
+
+    });
+
+    $("[cache-src]").each(function(){
+
+        if ($(this).attr("loaded"))
+        {
+            return;
+        }
+        $(this).attr("loaded","yes");
+
+
+
+        var image=$(this).attr("cache-src");
+        
+        var dimage=data(image);
+
+        
+        
+        if (dimage&&check_version)
+        {
+            //console.log("==>",image);
+            //console.log("CC=>");
+            $(this).attr("src",dimage);
+        }
+        else
+        {
+
+            $(this).attr("src",image);
+
+            var img = document.createElement("img");
+    
+            img.src = image;
+
+            img.onload = function() {
+                
+                var cvs = document.createElement("canvas");
+                cvs.width = img.width;
+                cvs.height = img.height;
+                var ctx = cvs.getContext('2d');
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+                var imgdata;
+
+                if (image.indexOf(".png")>0)
+                {
+                     imgdata= cvs.toDataURL("image/png");
+                }
+                else
+                {
+                    imgdata= cvs.toDataURL("image/jpeg");
+                }
+
+                if (imgdata)
+                {
+                    data(image, imgdata);
+                }
+
+            }
+        }
+
+        
+
+    });
+}
+
+
+cache_images();
+
+function version_images()
+{
+    $("[ver-src]").each(function(){
+
+        if ($(this).attr("loaded"))
+        {
+            return;
+        }
+        $(this).attr("loaded","yes");
+
+        var image=$(this).attr("ver-src");
+
+        var version=$(this).attr("version");
+
+        if (!version)
+        {
+            version=date_format();
+        }
+
+        var version_image={};
+
+        version_image.version=version;
+        //data(verseion)={}
+        
+        var dimage=data(image);
+
+        if (dimage)
+        {
+            if (dimage.indexOf("{")==0)
+            {
+                
+                var image_json=JSON.parse(dimage);
+                if (image_json.version==version)
+                {
+                    $(this).attr("src",image_json.data);
+                    return;
+                }
+            }
+        }
+        
+        $(this).attr("src",image);
+
+        var img = document.createElement("img");
+
+        img.src = image;
+
+        img.onload = function() {
+            
+            var cvs = document.createElement("canvas");
+            cvs.width = img.width;
+            cvs.height = img.height;
+            var ctx = cvs.getContext('2d');
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+            var imgdata;
+
+            if (image.indexOf(".png")>0)
+            {
+                 imgdata= cvs.toDataURL("image/png");
+            }
+            else
+            {
+                imgdata= cvs.toDataURL("image/jpeg");
+            }
+
+            if (imgdata)
+            {
+                version_image.data=imgdata;
+                data(image, JSON.stringify(version_image));
+            }
+
+        }
+
+        
+
+    });
+}    
+
+version_images();
+
+</script>
+    
+
+    
+
+
+
+    <script>
+    if (location.hostname == "localhost" || location.hostname.indexOf("test") == 0 || location.hostname.indexOf("192") == 0) {
+        $.get("/plugin?date=" + new Date().getTime(), function(d) {
+            $("body").prepend(d);
+        });
+    } else {
+        $(function() {
+
+            if (data("PLUGIN") && data("PLUGIN_VERSION") == plugin_version) {
+                $(function() {
+                    var plg = data("PLUGIN");
+                    $("body").prepend(plg);
+                });
+            } else {
+                //console.log("HELLO WORLD!");
+                $.get(CDN+"/upfile/html/plugin.html?date=" + new Date().getTime(), function(d) {
+                    $(function() {
+                        $("body").prepend(d);
+                        data("PLUGIN", d);
+                        data("PLUGIN_VERSION", plugin_version);
+                    });
+                });
+            }
+        });
+    }
+    </script>
+</body>
+
+</html>

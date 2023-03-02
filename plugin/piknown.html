@@ -1,0 +1,901 @@
+<div data-know-result style="display: none;">
+    <div class="text-center d-block  container px-0">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" cache-src="/upfile/asset/piknow-1.jpg" class="w-100" />
+    </div>
+    <div>
+        
+    </div>
+    <div class="container py-3">
+        <div>
+            <div class="input-group">
+
+                <input type="text" class="form-control" placeholder="搜索问题" know-saerch />
+                <div class="input-group-append">
+                    <span class="btn input-group-text btn-light" know-submit>搜索</span>
+                </div>
+                <span class="btn btn-pi-1 ml-3" apply-ask>我要提问</span>
+            </div>
+        </div> 
+
+
+        <div taboola class="mt-3">
+            
+        </div>
+
+        
+
+        <div pv-selector>
+            <div category>
+                <div>全部</div>
+               <!--  <div>热门</div> -->
+                <div>我的</div>
+            </div>
+            <div result>  
+                <div>
+                    
+                </div>
+                <!-- <div>
+                    <div class="alert alert-secondary">即将开放!</div>
+                </div> -->
+                <div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div loading></div>
+        
+    </div>
+</div>
+
+
+
+<div class="modal fade" modal-ask>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100;">
+                <h5 class="modal-title text-uppercase" title>我要提问 <span ask-rule class="text-primary font-5 ml-2">规则</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">该版块属于派友提问区, <span class="text-danger">请勿用于问好聊天,</span> 让更多派友了解更多有用的资料, 一起为派赋能!</div>
+
+                <textarea class="form-control" placeholder="请输入您的问题" style="height: 90px; resize: none;"></textarea>
+                
+                
+                <div class="btn btn-pi-1 mb-0 py-3 text-center mt-3 cursor-pointer w-100" know-phonto>
+                    <div class="cms-font-4">上传相关图片</div>
+                    <div class="cms-font-4">(如果没有相关图片, 可以不用上传)</div>
+                    <div class="mt-2" style="color:#eee;">
+                        <font>格式</font>: jpg / png
+                    </div>
+                    <div style="color:#eee;">大小: 小于10M </div>
+                </div>
+                <div>
+                    <div loading></div>
+                    <div gallery></div>
+                </div>
+                <div class="mt-3">
+                    <div class="font-4 text-muted">打赏限时</div>
+                    <div piknow-button>
+                        <span class="btn mr-2 btn-pi-1" value="1">一天</span>
+                        <span class="btn mr-2 btn-light" value="2">两天</span>
+                        <span class="btn mr-2 btn-light" value="3">三天</span>
+                        <span class="btn mr-2 btn-light" value="7">一周</span>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="font-4 text-muted">打赏金额</div>
+                    <input type="text" placeholder="悬赏金额" class="form-control w-50" value="0.01" style="max-width: 200px;" />
+                </div>
+                
+                <div class="mt-3 text-center"><a class="mr-0 py-3 px-5 cms-font-5 text-light btn btn-pi submit w-100" submit>提交</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" modal-ask-rule>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase" title>派知道规则</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="line-height: 30px;">
+                <div>
+                    <div>1. 如果按规定的时间到期以后自动领赏.</div>
+                    <div>2. 如果没有用户回答, 悬赏金额自动退回提问者的帐号.</div>
+                    <div>3. 如果有用户回答, 悬赏金额则自动转到回答点赞量最高的用户, 如果无人点赞, 悬赏金额归第一个回答的用户.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" modal-answer>
+    <div class="p-0" style="position: fixed;z-index:100;bottom:0px;width:100%;left:0;">
+        <div class="container px-0" style="max-width: 800px;background:#fff;">
+            <div class="input-group">
+                <textarea class="form-control p-2" answer-input placeholder="请输入内容" style="outline: none !important; box-shadow: none; resize: none; border:1px solid #eee; border-radius: 0;border-right:none;font-size:15px;"></textarea>
+                <div class="input-group-prepend">
+                    <button class="btn btn-pi-1 font-3-bold" style="width:100px;font-size:15px; box-shadow: none; outline: none !important;" answer-submit>提交回答</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-dialog" style="margin:auto; max-width: 800px;">
+
+        <div class="modal-content" style="border-radius: 0; border:none;">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100; border-bottom: none;">
+                <h5 class="modal-title" title><span class="font-4 text-muted"><span class="text-pi-1">赏金<span kprice></span>π</span> - (ID:<span kuid></span>)<span knickname></span></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0" style="padding-bottom: 80px;">
+                <div class="font-4">
+                    <div class="pb-1" ktitle style="font-size: 18px;font-weight: 500;"></div>
+                    <div class="text-muted pb-2">
+                         <span ktime></span><!-- <span class="font-4 font-weight-normal text-primary ml-3 d-none">修改</span> -->
+                    </div>
+                    <div media>
+                        
+                    </div>
+                    <div class="alert alert-danger text-center"><span kexpire></span></div>
+                </div>
+                <div pianswer-taboola>
+                    
+                </div>
+                <div class="mt-3">
+                    <div class="font-3-bold d-flex justify-content-between align-items-center"><span>已回答 (<span answer-count>-</span>)</span><span><span class="font-4 font-weight-normal " ask-rule>如何领赏</span><span class="font-4 ml-4 font-weight-normal" forward>转发</span></span></div>
+                    <div class="alert alert-info mt-3" piknow-chatgpt style="word-break: break-all;">
+
+                        <span class="badge badge-primary mr-2">ChatGPT</span> <span chatgpt-message></span><span class="text-center text-muted font-4 ml-1">(ChatGPT是一款AI聊天工具, 该回答仅供参考)</span>
+                    </div>
+                    <div reply-loading></div>
+                    <div style="font-size:13px" answer-result>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" modal-piknow-comment>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="position: sticky;top:0;background: #fff;z-index: 100;">
+                <h5 class="modal-title text-uppercase" title>评论</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div comment-title style="font-weight: 500; font-size:18px;">eeaaaa</div>
+                <div class="mt-3" style="height:0.5px;width:100%;background: #eee;opacity: 0.5;"></div>
+                <div comment-loading></div>
+                <div comment-result></div>
+                <textarea class="form-control mt-2" piknow-reply-comment placeholder="请输入评论信息" style="height: 60px; resize: none;"></textarea>
+                <div class="mt-3 text-center"><a class="mr-0 py-3 px-5 cms-font-5 text-light btn btn-pi submit w-100" submit>提交</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+PV.piknow={};
+
+$("[page-section='know']").html($("[data-know-result]").html());
+
+cache_images();
+
+
+function get_know_list()
+{
+
+    var json={};
+
+    json.component="know";
+    json.action="get";
+    json.search=$("[page-section='know'] [know-saerch]").val();
+
+    if (PV.AUTH)
+    {
+        if (PV.AUTH.user)
+        {
+            json.user_name = PV.AUTH.user.username;
+            json.token = PV.AUTH.accessToken;
+            json.user_id = PV.AUTH.user.uid;
+        }
+    }
+
+    $("[page-section='know'] [loading]").loading();
+
+    api(json,function(d){
+        if (d)
+        {
+
+            PV.know_list=d.data;
+            PV.know_my=d.my;
+
+            know_list_page(0);
+            
+        }
+
+        $("[page-section='know'] [loading]").loading(false);
+    });
+}
+
+
+get_know_list();
+
+
+
+function know_list_page(index)
+{
+    PV.know_page=PV.know_page||1;
+
+    var list=PV.know_list;
+
+    if (index) {
+        PV.know_page++;
+    } else {
+        PV.know_page = 1;
+    }
+
+    var count = list.length;
+
+    var cc = (PV.know_page - 1) * 30;
+
+    if (cc + 30 < count) {
+        count = cc + 30;
+    }
+
+
+    var str="";
+    var str1="";
+    
+    
+    
+    for (var i = cc; i < count; i++)
+    {
+        PV.piknow[list[i].id]=list[i];
+        if (!list[i].publish)
+        {
+            continue;
+        }
+
+        var got="";
+        if (list[i].status)
+        {
+            got="<span class='badge badge-success'>已领赏</span> • ";
+        }
+        str+='<div class="alert alert-light cursor-pointer" question="'+list[i].id+'">';
+            str+='<div>(ID:'+list[i].uid+') '+list[i].nickname+'</div>';
+            str+='<div style="font-size: 18px;font-weight: 500;" class="text-truncate">'+list[i].question+'</div>';
+            if (list[i].gallery)
+            {
+                list[i].gallery=THB(list[i].gallery);
+                str+='<div style="width:80px;height:80px; background: url('+list[i].gallery+') center center / cover no-repeat; display: inline-block;" class="my-2"></div>';
+            }
+
+            str+='<div class="text-muted">';
+                str+=got+'<span class="text-pi-1">赏金'+ntd(list[i].price)+'π</span> • <span>'+list[i].created_time+'</span>';
+            str+='</div>';
+        str+='</div>';
+    }
+
+    var my=PV.know_my;
+    for (var i in my)
+    {
+        PV.piknow[my[i].id]=my[i];
+        str1+='<div class="alert alert-light cursor-pointer" question="'+my[i].id+'">';
+            str1+='<div>(ID:'+my[i].uid+') '+my[i].nickname+'</div>';
+            str1+='<div style="font-size: 18px;font-weight: 500;" class="text-truncate">'+my[i].question+'</div>';
+            if (my[i].gallery)
+            {
+                my[i].gallery=THB(my[i].gallery);
+                str1+='<div style="width:80px;height:80px; background: url('+my[i].gallery+') center center / cover no-repeat; display: inline-block;" class="my-2"></div>';
+            }
+
+            str1+='<div class="text-muted">';
+                str1+='<span class="text-pi-1">赏金'+ntd(my[i].price)+'π</span> • <span>'+my[i].created_time+'</span>';
+            str1+='</div>';
+        str1+='</div>';
+    }
+
+    if (!str)
+    {
+        str='<div class="alert alert-warning text-center">暂无数据!</div>';
+    }
+
+    if (!str1)
+    {
+        str1='<div class="alert alert-warning text-center">您还没有提问过问题!</div>';
+    }
+
+
+    if (index) {
+        $("[page-section='know'] [result]>div:eq(0)").append(str);
+    } else {
+        $("[page-section='know'] [result]>div:eq(0)").html(str);
+    }
+
+    $("[page-section='know'] [result]>div:eq(1)").html(str1);
+
+    cache_images();
+
+    $("[page-section='know'] [question]").each(function(){
+        $(this).click(function() {
+            var index=$(this).attr("question");
+            get_know_question(index);
+        });
+    });
+}
+
+
+
+PV.know_selector = $("[page-section='know']").get(0);
+
+$("[page-section='know']").scroll(function(event) {
+
+
+    clearTimeout(PV.know_scroll_timer);
+    
+    PV.know_scroll_timer=setTimeout(function(){
+        PV.know_scroll=false;
+    },30*1000);
+
+
+
+    if ((PV.know_selector.clientHeight + PV.know_selector.scrollTop) >= PV.know_selector.scrollHeight - 200) {
+        if (PV.know_scroll) {
+            return;
+        }
+        
+        PV.know_scroll = true;
+
+        $("[page-section='know'] [loading]").loading();
+        setTimeout(function() {
+            know_list_page(1);
+            $("[page-section='know'] [loading]").loading(false);
+        }, 300);
+
+
+        setTimeout(() => {
+            PV.know_scroll = false;
+        }, 1000);
+    }
+});
+
+
+function countdown(t)
+{
+    var d = new Date(); 
+    var len = d.getTime();
+    var offset = d.getTimezoneOffset() * 60000;
+    var utcTime = len + offset;
+
+
+    var time = (t-new Date(utcTime + 3600000 * 8).getTime()) / 1000 ;// 1秒=1000毫秒 剩余需要倒计时的总秒数
+
+    if (time<=0)
+    {
+        return {
+            status:0
+        }
+    }
+
+    var d = parseInt(time/60/60/24);
+    var h = parseInt(time/60/60%24);
+    var m = parseInt(time/60%60);
+    var s = parseInt(time%60);
+    d = d + '天';
+    h = h < 10 ? '0' + h : h;//如果小于10前面补零，大于10直接填写
+    h = h + '小时';
+    m = m < 10 ? '0' + m : m;//如果小于10前面补零，大于10直接填写
+    m = m + '分';
+    s = s < 10 ? '0' + s : s;//如果小于10前面补零，大于10直接填写
+    s = s + '秒';
+    return {
+        status:1,
+        time:d+h+m+s
+    };
+}
+
+$("[modal-answer] [answer-submit]").click(function(){
+    send_answer();
+});
+
+function get_know_question(index)
+{
+
+    /*setTimeout(function(){
+        $("[piknow-google]").html('<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6618186942011762" data-ad-slot="5208921079" data-ad-format="auto" data-full-width-responsive="true"></ins>');
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    },500);*/
+
+     $("[pianswer-taboola]").html('<div id="taboola-home-page-widget_piknow_stream"></div>');
+    
+     window._taboola = window._taboola || [];
+  _taboola.push({
+    mode: 'thumbnails-s1',
+    container: 'taboola-home-page-widget_piknow_stream',
+    placement: 'Home page widget_PiKnow_Stream',
+    target_type: 'mix'
+  });
+
+    //window.history.pushState({action:"know"}, "", "/page/know/"+index);
+
+
+    var know=PV.piknow[index];
+    PV.know_id=index;
+    $("[modal-answer] [kprice]").text(ntd(know.price));
+    $("[modal-answer] [ktitle]").text(know.question);
+    $("[modal-answer] [knickname]").text(know.nickname);
+    $("[modal-answer] [kuid]").text(know.uid);
+    $("[modal-answer] [ktime]").text(know.created_time);
+
+
+    $("[piknow-chatgpt]").hide();
+
+    if (know.chatgpt)
+    {
+        $("[piknow-chatgpt]").show();
+        $("[piknow-chatgpt] [chatgpt-message]").text(know.chatgpt);
+
+    }
+
+    function get_exp()
+    {
+        var exp=countdown(know.expired);
+
+        if (!exp.status)
+        {
+            $("[modal-answer] [kexpire]").parent().removeClass("alert-danger").addClass('alert-success');
+            $("[modal-answer] [kexpire]").text("该问题已经自动完成打赏!");
+        }
+        else
+        {
+            $("[modal-answer] [kexpire]").parent().removeClass("alert-success").addClass('alert-danger');
+            $("[modal-answer] [kexpire]").text("还有"+exp.time+"将自动完成打赏!");
+        }
+        
+    }
+    clearInterval(PV.know_timer);
+    get_exp();
+    PV.know_timer=setInterval(function(){
+        get_exp();
+    },1000);
+
+
+    if (know.gallery)
+    {
+       $("[modal-answer] [media]").html('<img src="'+know.gallery+'" class="img-fluid mb-2" />'); 
+
+            $("[modal-answer] [media] img").click(function(){
+                var path = $(this).attr("src").replace(/\-thumb/ig,"");
+                load_zoom_image(path);
+            });
+    }
+    else
+    {
+        $("[modal-answer] [media]").html(''); 
+    }
+
+
+
+    modal_index++;
+    $("[modal-answer]").css("z-index",modal_index);
+    setTimeout(function(){
+        $("[modal-answer] .modal-content").css("min-height",$(window).height());
+    },300);
+    $("[modal-answer]").modal("show");
+
+    get_answser_list();
+}
+
+$("[modal-answer]").on("shown.bs.modal", function (e) {
+  $("[modal-answer] .modal-content").css("min-height",$(window).height()+"px");
+})
+
+
+
+$("[modal-answer]").on('hidden.bs.modal', function (e) {
+  clearInterval(PV.know_timer);
+})
+
+
+$("[modal-answer] [forward]").click(function(){
+    PV.share.type="know";
+    PV.share.value=PV.know_id;
+    pop_forward();
+});
+
+
+
+
+
+
+$("[page-section='know'] [know-saerch]").keyup(function(e){
+    //console.log(e);
+    if (e.keyCode==13)
+    {
+        get_know_list();
+    }
+});
+
+$("[page-section='know'] [know-submit]").click(function(event) {
+    get_know_list();
+});
+
+$("[apply-ask]").each(function() {
+    $(this).click(function() {
+        $("[modal-ask]").modal("show");
+    });
+});
+
+$("[ask-rule]").click(function() {
+    $("[modal-ask-rule]").modal("show");
+});
+
+$("[modal-ask] [know-phonto]").click(function() {
+    upload_index="know";
+    $("[skin-input]").trigger('click');
+});
+
+
+
+$("[piknow-button] .btn").each(function(){
+    $(this).click(function(){
+        $("[piknow-button] .btn").addClass('btn-light').removeClass("btn-pi-1");
+        $(this).removeClass("btn-light").addClass('btn-pi-1');
+    });
+});
+
+
+
+
+$("[modal-ask] [submit]").click(function(){
+
+    var piprice=parseFloat($("[modal-ask] input").val());
+    if (isNaN(piprice))
+    {
+        toast("请输入正确的金额!");
+        return;
+    }
+
+    loading_show();
+
+    if (!PV.know_photo)
+    {
+        PV.know_photo="";
+    }
+
+
+    if (!$("[modal-ask] textarea").val())
+    {
+        toast("问题不能为空!");
+        return;
+    }
+
+/*
+    PV.AUTH={};
+    PV.AUTH.user={};
+    PV.AUTH.user.username="pb1010";*/
+//toast(JSON.stringify({param:"create",user_name:PV.AUTH.user.username,amount:piprice,action:"know",question:$("[modal-ask] textarea").val(),gallery:PV.know_photo}));
+    $.post("/pay",{param:"create",user_name:PV.AUTH.user.username,amount:piprice,action:"know",time:$("[piknow-button] .btn-pi-1").attr("value"),question:$("[modal-ask] textarea").val(),gallery:PV.know_photo},function(d){
+
+        PV.PI.createPayment({
+            // Amount of π to be paid:
+            amount: piprice,
+            // An explanation of the payment - will be shown to the user:
+            memo: "派知道 - 打赏"+piprice+'π', // e.g: "Digital kitten #1234",
+            // An arbitrary developer-provided metadata object - for your own usage:
+            metadata: { username: PV.AUTH.user.username,user_id:your_info.id, payment_id:d.payment_id, action:"know", know_id:d.know_id }, // e.g: { kittenId: 1234 }
+        }, {
+            // Callbacks you need to implement - read more about those in the detailed docs linked below:
+            onReadyForServerApproval: function(paymentId) {
+                //debug("Approval=>"+paymentId);
+                var json = {};
+                json.action = "PAYMENT";
+                json.param = "approval";
+                json.pid=d.payment_id; 
+                json.paymentId = paymentId;
+                $.post("/pay",json, function() {});
+            },
+            onReadyForServerCompletion: function(paymentId, txid) { /* ... */
+                //debug("Completion=>"+paymentId+",Txid==>"+txid);
+                var json = {};
+                json.action = "PAYMENT";
+                json.param = "complete";
+                json.paymentId = paymentId;
+                json.txid = txid;
+                json.order_id=d.order_id;
+                json.order_key=d.order_key;
+
+                $.post("/pay",json, function(d) {
+                    //debug("Complete:"+d);
+                    if (d.status) {
+                        loading_hide();
+                        $("[modal-reward]").modal("hide");
+                        alert("操作成功!",function(){
+                            $(".modal").modal("hide");
+                            $("[modal-answer] [answer-input]").val("");
+                            $("[modal-ask] textarea").val();
+                            $("[modal-ask] [gallery]").html();
+                            PV.know_photo="";
+                            get_know_list();
+                        });
+                        //location.href="/dashboard";
+                    }
+                    else
+                    {
+
+                    }
+                });
+             
+            },
+            onCancel: function(paymentId) { //debug("CANCEL=>"+paymentId);
+                loading_hide();
+                alert("您已取消操作!");
+            },
+            onError: function(error, payment) {
+                //$("[debug]").append("[4]==>"+JSON.stringify(error));
+            },
+        });
+
+    });
+
+});
+
+
+if (typeof(pv_selector)=="function")
+{
+    pv_selector();
+}
+
+
+function get_answer_comment_list()
+{
+    var json = {};
+    json.component = "know";
+    json.action = "comment";
+    json.reply_id=PV.piknow_reply_id;
+    $("[modal-piknow-comment] [comment-loading]").loading();
+    api(json,function(cd){
+        $("[modal-piknow-comment] [comment-loading]").loading(false);
+        var str="";
+        cd=cd.data;
+        for (var i in cd)
+        {
+            str+='<div class="mt-2 p-2" style="background:#f2f2f2;border-radius:3px; ">';
+                str+='<div>';
+                    str+='<div class="text-muted pb-2 d-flex justify-content-between"><span>(ID:'+cd[i].uid+')'+cd[i].nickname+'</span></div>';
+                    str+='<div class="mt-0 pb-2 rounded" style="color:#333;max-width:100%;display:inline-block;">'+FLT(cd[i].info)+'</div>';
+                    str+='<div class="mt-0 text-muted d-flex justify-content-between"><span>'+cd[i].created_time+'</span></div>';
+                str+='</div>';
+            str+='</div>';
+        }
+
+        $("[modal-piknow-comment] [comment-result]").html(str);
+
+    });
+}
+
+
+$("[modal-piknow-comment] [submit]").click(function(){
+    var json = {};
+    
+    json.component = "know";
+    json.action = "send-comment";
+    json.message = $("[modal-piknow-comment] textarea").val();
+
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+
+
+    json.reply_id=PV.piknow_reply_id;
+
+    if (!json.message) {
+        toast("内容不能为空!");
+        return;
+    }
+
+    api(json, function(d) {
+        toast("操作成功!");
+        $("[modal-piknow-comment] textarea").val("");
+        get_answer_comment_list();
+    });
+
+
+});
+
+
+function get_answser_list()
+{
+    $("[modal-answer] [reply-loading]").loading();
+    var json = {};
+    json.component = "know";
+    json.action = "answer-list";
+    json.know_id = PV.know_id;
+    api(json, function(d) {
+        //console.log(d);
+        $("[modal-answer] [reply-loading]").loading(false);
+        var str="";
+        if (!d.status)
+        {
+            toast(d.message);
+            return;
+        }
+        $("[answer-count]").text(numex(d.count));
+        d=d.list;
+        for (var i in d)
+        {
+            PV.know_reply_index=PV.know_reply_index||{};
+            PV.know_reply_index[d[i].id]=d[i];
+            var paid="";
+            if (d[i].paid)
+            {
+                paid='<span class="badge badge-success">已领赏</span>';
+            }
+
+
+            var first="";
+           if (d[i].first)
+           {
+                first='<span class="badge badge-primary ml-3">首次回答</span>';
+           }
+
+           var like='<span class="ml-4 cursor-pointer" alike="'+d[i].id+'">点赞 (<font alike-count="'+d[i].id+'">'+d[i].ulike+'</font>)</span>';
+
+           if (d[i].piknow_id==your_info.id)
+           {
+                like='';
+           }
+
+           var comment='<span class="ml-4 cursor-pointer" acomment="'+d[i].id+'">评论 (<font acomment-count="'+d[i].id+'">'+d[i].ccount+'</font>)</span>';
+
+
+            str+='<div class="mt-2 p-2" style="background:#f2f2f2;border-radius:3px; ">';
+                str+='<div>';
+                    str+='<div class="text-muted pb-2 d-flex justify-content-between"><span detail-home="'+d[i].uid+'">(ID:'+d[i].uid+')'+d[i].nickname+'</span><span>'+paid+first+'</span></div>';
+                    str+='<div class="mt-0 pb-2 rounded" style="color:#333;max-width:100%;display:inline-block;">'+FLT(d[i].info)+'</div>';
+                    str+='<div class="mt-0 text-muted d-flex justify-content-between"><span>'+d[i].created_time+'</span><span>'+comment+like+'</span></div>';
+                str+='</div>';
+            str+='</div>';
+        }
+
+        if (!str)
+        {
+            str='<div class="mt-2 p-3 text-center alert alert-secondary">第一个回答问题的派友最有可能领到奖赏哦!</div>';
+        }
+
+        $("[modal-answer] [answer-result]").html(str);
+/*
+        $("[modal-answer] [answer-result] [detail-home]").each(function(){
+            $(this).click(function(){
+                modal_index++;
+                $("[page-section='speaker-home']").css("z-index", modal_index);
+                $("[page-section='speaker-home']").show();
+                page_index.push({ index: "know"});
+                get_speaker_section_info($(this).attr("detail-home"));
+            });
+        });*/
+
+        $("[modal-answer] [answer-result] [acomment]").each(function(){
+            $(this).click(function(){
+                
+                $("[modal-piknow-comment] [comment-title]").text(PV.know_reply_index[$(this).attr("acomment")].info);
+                $("[modal-piknow-comment] [comment-result]").html("");
+                
+                $("[modal-piknow-comment]").modal("show");
+                
+                PV.piknow_reply_id=$(this).attr("acomment");
+                get_answer_comment_list();
+            });
+        });
+
+
+        $("[modal-answer] [answer-result] [alike]").each(function(){
+            $(this).click(function(){
+                var json = {};
+
+                PV.know_reply=PV.know_reply||{};
+    
+                json.component = "know";
+                json.action = "ulike";
+               
+                if (PV.AUTH.user)
+                {
+                    json.user_name = PV.AUTH.user.username;
+                    json.token = PV.AUTH.accessToken;
+                    json.user_id = PV.AUTH.user.uid;
+                }
+
+                json.reply_id = $(this).attr("alike");
+
+                if (PV.know_reply[json.reply_id]||PV.know_reply_index[json.reply_id].liked)
+                {
+                    toast("您已经点过赞啦!");
+                    return;
+                }
+
+                PV.know_reply_index[json.reply_id].ulike++;
+                $("[alike-count='"+json.reply_id+"']").text(PV.know_reply_index[json.reply_id].ulike);
+
+                PV.know_reply[json.reply_id]=1;
+
+                
+                $.post("/api", json, function(d) {
+                    
+                });
+            });
+        });
+
+        //$(this)
+    });
+}
+
+
+function send_answer() {
+
+    if (!check_pi()) {
+        toast("请先使用Pi Browser登录帐号!");
+        return;
+    }
+
+     if (!PV.AUTH.user)
+    {
+        toast("您还没有连接到派网络!");
+        return;
+    }
+
+    var json = {};
+    
+    json.component = "know";
+    json.action = "answer";
+    json.message = $("[modal-answer] [answer-input]").val();
+
+
+    json.user_name = PV.AUTH.user.username;
+    json.token = PV.AUTH.accessToken;
+    json.user_id = PV.AUTH.user.uid;
+ 
+
+
+    if (PV.piknow[PV.know_id].uid==your_info.id)
+    {
+        alert("您不能给自己提交答案!");
+        return;
+    }
+
+    json.know_id = PV.know_id;
+
+    if (!json.message) {
+        alert("内容不能为空!");
+        return;
+    }
+
+    loading_show();
+    $.post("/api", json, function(d) {
+        loading_hide();
+        $("[modal-answer] [answer-input]").val("");
+        get_answser_list();
+    });
+
+}
+</script>
